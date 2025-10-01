@@ -1,7 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1759359345.48208 "hw2p1.tex" "hw2p1.pdf" "hw2p1" 1759359345.59887 0
-  "/etc/texmf/web2c/texmf.cnf" 1758853144.6734 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
+["pdflatex"] 1759360720.32176 "hw2p1.tex" "hw2p1.pdf" "hw2p1" 1759360720.44299 0
+  "/etc/texmf/web2c/texmf.cnf" 1759360602.71986 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1246382020 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -26,10 +25,10 @@
   "/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1751059413 30351 a2b09edc6c93a742566b222c33d0278e ""
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1756239283 41603 27f93b3067076450172040dcd57ca8b3 ""
   "/usr/share/texmf/web2c/texmf.cnf" 1756239283 41603 27f93b3067076450172040dcd57ca8b3 ""
-  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1758853429 128227 ed67923a37f7748d267799454bc1f95b ""
-  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1758853454 2201607 86cc122e637af332ebe068b37c6d4109 ""
-  "hw2p1.aux" 1759359345.57722 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "hw2p1.tex" 1759359222.35745 558 c597ed80a7c9ad9013c237a7411ba385 ""
+  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1759360609 75955 f78456fd1308dc295dc476a68e28d85b ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1759360621 2201600 a413227f5eafaab7c48b815d9a3def7d ""
+  "hw2p1.aux" 1759360720.41986 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "hw2p1.tex" 1759360717.91986 558 a55be9e6a2edef3341b1294732ae2b42 ""
   (generated)
   "hw2p1.aux"
   "hw2p1.log"

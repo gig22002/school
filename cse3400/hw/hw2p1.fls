@@ -28,7 +28,6 @@ INPUT ./hw2p1.aux
 INPUT ./hw2p1.aux
 INPUT hw2p1.aux
 OUTPUT hw2p1.aux
-INPUT /usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
