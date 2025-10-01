@@ -4,7 +4,7 @@
 \begin{document}
 
 \begin{enumerate}
-	\item To decrypt, you split $y$ in half, obtaining $y_1$ and $y_2$. Plug $y_1$ into F, then $\oplus$ the result with the first cipehrtext. Plug $y_2$ into F, then $\oplus$ the result with the second ciphertext. \\
+	\item To decrypt, you split $y$ in half, obtaining $y_1$ and $y_2$. Plug $y_1$ into F, then $\oplus$ the result with the first ciphertext. Plug $y_2$ into F, then $\oplus$ the result with the second ciphertext. \\
 		This is not secure. The attacker can know $y$, which is always the same. Any string $\oplus$\rq d with its complement is a string of 1s (therefore $r \oplus \overline{r}$ is all 1s).
 \end{enumerate}
 
