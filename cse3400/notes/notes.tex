@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\noindent \textbf{Constructing MAC: Three Approaches}\\
+Design \lq from scratch\rq, validate security by failure to cryptanalyze\\
+\begin{itemize}
+	\item Huge effort, risk do only for a few \lq building blocks \rq
+	\item Maybe from EDC (Error Detection Code), but it is not secure for every EDC
+	\end{itemize}
+Robust combiner of (two) MAC candidates:\\
+$MAC_{k,k'}(m)=f_k(m)||f'_{k'}(m), MAC_{k,k'}(m)=f_k(m)\oplus f'_{k'}(m)$ are secure MAC, if \textit{either} $f$ or $f'$ are a secure MAC\\
+\\\textbf{Every PRF is also a MAC}
+\begin{itemize}
+	\item A PRF is a MAC for $l$-bit messages.
+	\item $(l,n)$-bit FIL (Fixed Input Length) MAC from n-bit PRP (block cipher): use CBC-MAC
+\end{itemize}
+\textbf{Cipher Block Chaining MAC: CBC-MAC}\\
+Split plaintext $m$ into blocks\\
+\textbf{Fixed, known (zero)} Initialization Vector ($IV$)\\
+The tag is the cipher of the last block $CBC-MAC^E_k(m_1||m_2||...||m_l) = E_k(m_l\oplus E_k(...Ek(m_l)))$\\
+Recall: MACs are deterministic functions\\
+
+\noindent \textbf{CBC-MAC-based VIL-MAC}\\
+Is CBC-MAC\textsuperscript{E} a VIL-MAC?
+\begin{itemize}
+	\item No!
+	\item Ask for $b=CBC-MAC^E_k(a)=E_k(a);$
+	\item then output (ac, b) s.t $m = ac$ with $tag = b$ where $c = a\oplus b$.
+\end{itemize}
+Solution: prepend message length (called CMAC)
+\begin{itemize}
+	\item Let $CMAC^E_k(m) = CBC-MAC^E_k(L(m)||m)$, where $L(m)$ is a 1-block encoding of $|m|$
+	\item CMAC is a secure VIL-MAC construction!
+	\item First block is always the message length. Check rest of tag based on MAC and msg length
+\end{itemize}
+\textbf{Examples of MAC Constructions}\\
+Are the following constructions a secure MAC?
+\begin{enumerate}
+	\item Let E\textsubscript{k} be a block cipher that takes input of length $n$ bits. For a msg $m$ of length $2n$ bits, compute the tag as $MAC_k(m) = E_k(m_L) \oplus  E_k(m_R)$\\
+		Function is deterministic\\
+		Ex: $m=0^n||1^n$, get tag $t$. $m'=1^n||0^n$, tag is equal to $t$.\\
+		Attacker probability: P(Valid Forgery) = 1 ; $1-\frac{1}{2^n}$
+	\item Let G be a secure PRG. For a msg $mM$ of length $n$ bits, compute the tag as $MAC_k(m) = k \oplus  PRG(m)$\\
+		Attacker can determine $y=G(m)$, and get $k$ via $MAC_k(m) \oplus  y = k$\\
+		$\Sigma = 1 - \frac{1}{2^n}$
+\end{enumerate}
+\textbf{Combining Authentication and Encryption}\\
+For confidentiality, use encryption\\
+For authentication, use MAC\\
+For \underline{both} confidentiality \underline{and} authentication?
+\begin{itemize}
+	\item Option 1: Combine MAC and encryption\\
+		Potential pitfalls (vulnerabilities)
+	\item Option 2: authenticated-encryption schemes (or modes)\\
+		Easier to deploy (securely)
+\end{itemize}
+\textbf{Generic MAC and Encryption Combinations}\\
+Three standards, three ways...
+\begin{itemize}
+	\item Authenticate and Encrypt (A\&E)
+	\item Authenticate then Encrypt (AtE)
+	\item Encrypt then Authenticate (EtA)
+\end{itemize}
+\textbf{Security of Generic MAC/Enc Combinations}\\
+A\&E may be vulnerable!
+\begin{itemize}
+	\item Example:\\
+		Never compute a MAC over the information directly! Only for integrity, not security
+\end{itemize}
+How about EtA? \textbf{Provably CCA-Secure!!}
+\begin{itemize}
+	\item wow!
+\end{itemize}
+\textbf{Keys for MAC and Encryption?}\\
+Using same key for MAC+Encryption? Never!\\
+Exercise: show (contrived) examples\rq vulnerabilities:\\
+Solution: $k_{mac} = PRF_k('MAC'), k_{enc} = PRF_k('Encrypt')$\\
+Attacker does not know $k$!
+
+\end{document}
