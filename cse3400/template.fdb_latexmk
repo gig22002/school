@@ -1,0 +1,24 @@
+# Fdb version 4
+["pdflatex"] 1759360785.81535 "template.tex" "template.pdf" "template" 1759360785.94982 0
+  "/etc/texmf/web2c/texmf.cnf" 1759360602.71986 475 c0e671620eb5563b2130f56340a5fde8 ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty" 1734129479 7984 7dbb9280f03c0a315425f1b4f35d43ee ""
+  "/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty" 1572645307 1057 525c2192b5febbd8c1f662c9468335bb ""
+  "/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty" 1359763108 5949 3f3fd50a8cc94c3d4cbf4fc66cd3df1c ""
+  "/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty" 1359763108 13829 94730e64147574077f8ecfea9bb69af4 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/base/article.cls" 1748806692 20144 b966087dda3b194755eb460d32e2ef75 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo" 1748806692 8448 686612a86f0e04f41ea577f5ec7e83d8 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty" 1578002852 41601 9cf6c5257b1bc7af01a58859749dd37a ""
+  "/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty" 1748806692 2671 d9941f4bf4750e9b0603c9a2ec54693b ""
+  "/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1751059413 30351 a2b09edc6c93a742566b222c33d0278e ""
+  "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1756239283 41603 27f93b3067076450172040dcd57ca8b3 ""
+  "/usr/share/texmf/web2c/texmf.cnf" 1756239283 41603 27f93b3067076450172040dcd57ca8b3 ""
+  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1759360609 75955 f78456fd1308dc295dc476a68e28d85b ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1759360621 2201600 a413227f5eafaab7c48b815d9a3def7d ""
+  "template.aux" 1759360785.93185 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "template.tex" 1759360782.49585 133 0873265addd1f1ae06ba1f849a5724e7 ""
+  (generated)
+  "template.aux"
+  "template.log"
+  "template.pdf"
+  (rewritten before read)
