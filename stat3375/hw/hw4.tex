@@ -2,17 +2,17 @@
 \usepackage{amssymb, amsmath}
 \usepackage[left=1.5cm, right=2cm]{geometry}
 \begin{document}
-\textbf{Gio Girasoli\\STAT3375Q HW4\\{\tiny I learned \LaTeX}}
+\textbf{Gio Girasoli\\STAT3375Q HW4}
 \begin{itemize}
 
-	\item[\textbf{3.103}] $\frac{\left( \begin{array}{c} 6 \\ 5 \end{array} \right)}{\left( \begin{array}{c} 10 \\ 5 \end{array} \right)} \approx 0.0238$
+	\item[\textbf{3.103}] $\frac{\binom{6}{5}}{\binom{10}{5}} \approx 0.0238$
 	\item[\textbf{3.106}] $p(Defective) = \frac{4}{10}$\\
 		$E(Y) = np = \mbox{\textdollar}50\frac{4}{10} = \mbox{\textdollar}20$\\\\
 		$Var(Y) = np(1-p) = 20(.6) = \$12$
 	\item[\textbf{3.105}] \begin{itemize}
 			\item[\textbf{a}] Hypergeometric. We are selecting $n=3$ randomly sampled objects from a population of size $N=8$ with $r=5$ Class 1 objects.
 			\item[\textbf{b}] $P(Y\geq 2) = P(Y=2)+P(Y=3)$\\
-				$= \frac{\left( \begin{array}{c} 5 \\ 2 \end{array} \right)\left( \begin{array}{c} 8-5 \\ 3-2 \end{array} \right)}{\left( \begin{array}{c} 8 \\ 3 \end{array} \right)} + \frac{\left( \begin{array}{c} 5 \\ 3 \end{array} \right)\left( \begin{array}{c} 8-5 \\ 3-3 \end{array} \right)}{\left( \begin{array}{c} 8 \\ 3 \end{array} \right)} \approx .714$
+				$= \frac{\binom{5}{2}\binom{8-5}{3-2}}{\binom{8}{3}} + \frac{\binom{5}{3}\binom{8-5}{3-3}}{\binom{8}{3}} \approx .714$
 			\item[\textbf{c}] $E(Y)=n\frac{r}{N}=3\frac{5}{8}=1.875$\\
 				$Var(Y)=n\left(\frac{r}{N}\right)\left(\frac{N-r}{N}\right)\left(\frac{N-n}{N-1}\right)=3\frac{5}{8}\frac{8-5}{8}\frac{8-3}{8-1}\approx .502$
 		\end{itemize}
