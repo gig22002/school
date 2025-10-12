@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\textbf{Hash Functions}\\
+Input $m$: binary string\\
+Output $h(m)$:
+\begin{itemize}
+	\item "Short" (n-bit) binary string (aka \textbf{message digest} or hash)
+\end{itemize}
+Efficiently computable\\
+Applications: cryptography, security, efficiency\\
+\underline{Keyed} $h_k(m)$, where the key is public, or \underline{unkeyed} $h(m)$\\
+
+\textbf{Motivation: Hashing for Efficiency}\\
+Input: large set (e.g. ints or strs)\\
+Goal: map "randomly" to few bins\\
+
+\textbf{Security Goal: Collision Resistance}:\\
+A \textbf{collision:} two inputs (e.g. names) with the same hash: $h('Bob')=h('Phil')$\\
+Every hash has collissions, since $|$input$| >> |$output$|$\\
+Collision resistance: hard to \textbf{find} these collisions
+\begin{itemize}
+	\item Note: attacker can always try names randomly until a collision is found
+	\item But this should be ineffective: must try about (on average) $N$ names (number of bins)
+\end{itemize}
+
+\textbf{Collision Resistant Hash Function (CRHF)}\\
+$h$ is CRHF if it is hard to find collisions $h(x)=h(x')$ for $x\neq x'$
+\begin{itemize}
+	\item Note: attacker can always try names randomly until collision is found
+	\item But this should be ineffective: must try about $|Range|$ values
+\end{itemize}
+\textbf{Definition} (Keyless Collision Resistant Hash Function (CRHF)). A keyless hash function $h^n(.) : \{0,1\}^* \rightarrow \{0,1\}^n$ is \textit{collision-resistant} if for every efficient (PPT) algorithm $A$, the advantage $\varepsilon^{CRHF}_{h,A}(n)$ is negligible in $n$, i.e. smaller than any positive polynomial for sufficiently large $n$ (as $n\rightarrow \infty$), where: \[
+	\varepsilon^{CRHF}_{h,A}(n)=Pr\left[(x,x')\leftarrow A(1^n) s.t. (x\neq x') \wedge (h^n(x)=h^n(x'))\right]
+\]
+
+\textbf{Keyless CRHF Do Not Exist}\\
+$|Range| << |Domain|$ so there \underline{is} a collision where $h(x')=h(x), x\neq x'$\\
+Keys are powerful because they allow you to change the terms on your adversary.\\
+For a keyless CRHF there \underline{is} a PPT algorithm A that can always output a collision: $A(1^n)=\{return\ x,x'\}$\begin{itemize}
+	\item Proof: intuitively, since the function is fixed (same input-output mapping), a collision instance can be hardcoded int he attacker algorithm and just output that collision and win the security game.
+\end{itemize}
+
+\textbf{Keyed CRHF}\\
+$k\overset{\$}{\leftarrow}\{0,1\}^n \leftarrow \mbox{Adversary} \leftarrow$ $(x,x')$ If $x\neq x'$ and $h(x)=h(x')$\\
+
+\textbf{Generic Collision Attacks}\\
+An attacker that runs in exponential time can always find a collision (i.e. non-PPT attacker)
+\begin{itemize}
+	\item Easy: find collisions in $2^n$ time by trying $2^n+1$ distinct inputs (compute their hash and locate a collision)
+\end{itemize}
+An attacker finds a collision with $2^{-n}$ probability (negligible probability).
+\begin{itemize}
+	\item Choose $x$ and $x'$ at random and check if they produce a collision.
+\end{itemize}
+
+\textbf{The Birthday Paradox}\\
+The birthday paradox states that the expected number $q$ of hashes (i.e. hash queries) until a collision is found in $O(2^{\frac{n}{2}})$ not $O(2^n)$. It is $q\lessapprox2^{n/2}*\sqrt{\frac{\pi}{2}}\lessapprox1.254*2^{n/2}$\\
+For 80 bits of effective security, use $n=160$
+\begin{itemize}
+	\item So to defend against an attacker who can perform $2^{80}$ hashes set the digest length to at least 160 bits (so the range has a size of $2^{160}$ digests)
+\end{itemize}
+
+\textbf{The Birthday Attack}\\
+Probability of NO birthday-collision:\begin{itemize}
+	\item Two people: (364/365)
+	\item Three people (364/365)(364/365)
+	\item ...
+	\item $n$ people: $\prod^{n-1}_{i=1}\frac{365-i}{365}$
+	\item So for 23 individuals, the probability of a birthday collision is about .5
+\end{itemize}
+
+\textbf{Collision-Resistance: Applications}\\
+Integrity (of object/file/message)\begin{itemize}
+	\item Send $hash(m)$ securely to validate $m$
+	\item Later, we will see how a hash funciton can be used to construct a MAC (called HMAC)
+\end{itemize}
+Hash-then-Sign\begin{itemize}
+	\item Instead of signing $m$, sign $hash(m)$ (more efficient!)
+\end{itemize}
+Blockchains\\
+
+
+
+\end{document}
