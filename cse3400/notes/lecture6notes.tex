@@ -82,6 +82,90 @@ Hash-then-Sign\begin{itemize}
 \end{itemize}
 Blockchains\\
 
+\textbf{Other Notions of Security}\\
+Collision resistance provides the strngest guarantee\begin{itemize}
+	\item Gives mroe freedom to the adversary; the adversary always wins if it finds any two inputs with the same digest.
+	\item No conditions on these two inputs other than being in the domain of the hash function.
+\end{itemize}
+\textbf{Hash Function}: is a mapping that takes an input (VIL) and maps it to a fixed length $n$ string where $n$ is the security parameter.\\
+Other security notions (but sufficient for many applications):\begin{itemize}
+	\item Target collision resistance (TCR)
+	\item Second preimage resistance
+	\item First preimage resistance
+\end{itemize}
+Birthday paradox (or attack) does not work against these weaker notions. It is for collision resistance; find \textit{any} two inputs that collide!\\
+
+\textbf{TCR and Birthday Paradox?}\\
+TCR: Adversary has to select the target \textit{before} knowing the key\\
+
+\textbf{We (mostly) focus on keyless hash}\\
+Although there are no CRHFs and theory papers focus on keyed hash\\
+But...\begin{itemize}
+	\item It's a bit less complicated and easier to work with.
+	\item No need to consider both ACR (Any Collision Resistance, which is the same as CRHF) and TCR. Why?
+	\item Modifying to CRHF is quite trivial: just make it keyed
+	\item Usually used in practice: code libraries, standards, ...
+\end{itemize}
+
+\textbf{$2^{nd}$-Preimage-Resistant Hash (SPR)}\\
+\underline{$y = h(x)$; image = preimage}\\
+Hard to find collision with a \underline{specific random $x$}\\
+So, the attacker's advantage (probability of finding such a collision) in the following game is negligible.\\
+Here, adversary has no freedom over the first preimage $x$, whereas in TCR, the attacker can choose $x$ (and then the second x is after knowing the hash function)\\
+Example: hashing software from developer is SPR, since the software hash is like the first preimage. The attacker must find a collision against this particular message (e.g. the software)\\
+
+\textbf{CRHF/SPR vs. Applications}\\
+CRHF secure for signing, SW-distribution\\
+How about SPR hash (weak CRHF)?\begin{itemize}
+	\item SW-distribution? YES
+	\item Hash-then-sign? NO
+\end{itemize}
+Why?\\
+Attacker can't impact SW to be distributed, but the attacker may be able to impact the signed message!\\
+Since h is not necessarily CRHF, its signature can be forged (the tag for two collisions is the same)\\
+
+\textbf{SPR: Collisions to Chosen Messages}\\
+Or: Alice and Mal, the corrupt lawyer\\
+Mal finds two "colliding wills," GoodW and BadW:\begin{itemize}
+	\item GoodW: contents agreeable to Alice
+	\item $h(GoodW)=h(BadW)$
+	\item Alice signs good will: $Sign(h(GoodW))$
+	\item $Sign(h(GoodW))=Sign(h(BadW))$
+\end{itemize}
+Is such an attack realistic? Or is SPR enough "in practice?" Yes.\\
+We usually rely on having a specific format for messages, like a fixed prefix chosen by the attacker.\\
+
+\textbf{Examples}
+\begin{enumerate}
+	\item Let $h_k$ be a keyed CRHF. Is $h'_k=h_k(h_k(x))$ a CRHF? Why?
+	\item For $x$ parsed as $x=x_1||x_2||x_3$, let $h(x_1||x_2||x_3)=x_1+x_2+x_3 \% p$, is $h$ a CRHF? Why? Is it an SPR? Why?
+	\item Let $h_k(m)$ be a TCR function. Construct $h_k'(m)=0^n$ if $m[1: |k|]=k$ and $h_k(m)$ otherwise (recall that the hash function input can be of any length). Is $h_k'$ a CRHF? Why? Is $h'_k$ a TCR? Why?
+		\begin{itemize}
+			\item Not a CRHF: A knows $k$ before outputting $m$ and $m'$, A can pick any two messages where the first $|k|$ bits are the key.
+			\item TCR: Attacker doesn't know key beforehand. $m$ chosen in advance must start with the key for the attacker to be successful, but the chances of this happening are $\frac{1}{2^{|k|}}$, which is negligible.
+		\end{itemize}
+\end{enumerate}
+
+\textbf{One-Way Function (OWF/First Preimage Resistance)}\\
+One-way function or first preimage resistance: given $h(k)$ for a \underline{random} $x$, it is hard to find $x$, \underline{or any $x'$} s.t. $h(x')=h(x)$ (like inverting the hash func)\\ 
+Given the output, cannot find the input (or a collision).\\
+Compare to:\begin{itemize}
+	\item Collision-Resistance (CRHF): hard to find any collision, i.e. any $(x,x')$ s.t. $h(x')=h(x), x\neq x'$
+	\item Second-Preimage Resistance (SPR): hard to find a collision with \underline{random} $x$, i.e. $x'$ s.t. $h(x')=h(x), x\neq x'$
+\end{itemize}
+
+\textbf{Application: One-time Password Authentication}\\
+Used with OWF, since it can't be inverted to glean passwd\\
+One-time password auth:\begin{itemize}
+	\item Select random $x$ : "one-time password" (keep secret)
+	\item Validate using non-secret "one-time validation token:" $h(x)$
+\end{itemize}
+
+\textbf{Randomness Extraction}\\
+It is a desired property of hash funcs.\\
+"If input is sufficiently random, then the output is random"\\
+\underline{Randomness extraction}: if any $m$ input bits are random $\rightarrow$ all $n$ output bits are pseudorandom, for sufficiently large $m$\\
+ROM (Random Oracle Model): assume hash function behaves as a true random function (difference from randomness extraction, which is not an assumption)\\
 
 
 
