@@ -28,7 +28,7 @@ private:
 template<class T>
 class Square : public Rectangle {
 public:
-	Square(T size) : Rectangle<T>(size, size) {}
+	Square(T size) : Rectangle<T>(size, size)}
 
 	T CalcArea() {
 		return size*size;
