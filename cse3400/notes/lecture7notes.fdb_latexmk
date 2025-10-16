@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1760622731.24082 "lecture6notes.tex" "lecture6notes.pdf" "lecture6notes" 1760622731.54087 0
+["pdflatex"] 1760625851.42961 "lecture7notes.tex" "lecture7notes.pdf" "lecture7notes" 1760625851.72674 0
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1755987285 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1755987285 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1755987285 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
@@ -24,7 +24,6 @@
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1755987285 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1755987285 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1755987285 37944 359e864bd06cde3b1cf57bb20757fb06 ""
-  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1755987285 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb" 1755987285 138258 6525c253f16cededa14c7fd0da7f67b2 ""
   "/usr/share/texmf-dist/tex/generic/iftex/iftex.sty" 1755987285 7984 7dbb9280f03c0a315425f1b4f35d43ee ""
   "/usr/share/texmf-dist/tex/generic/iftex/ifvtex.sty" 1755987285 1057 525c2192b5febbd8c1f662c9468335bb ""
@@ -45,10 +44,10 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1755987285 42087 b0f9697c952c8f5a8eede4134282cb0d ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1760449501 5311557 9da84c45f5b388655502706482323571 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1760449451 2686928 e8259dcdabec5375d8d82a7a692ce102 ""
-  "lecture6notes.aux" 1760622731.49584 32 2d1df76398b3c48c6419a45a7331db2d "pdflatex"
-  "lecture6notes.tex" 1760622729.83252 10094 97c150638265ff258d4d03e79d804616 ""
+  "lecture7notes.aux" 1760625851.68621 32 ab05033ccbb38b00a31b200ccedf8001 "pdflatex"
+  "lecture7notes.tex" 1760625850.73681 4589 cca599f6b4b658f57a0b119e0f41e5d0 ""
   (generated)
-  "lecture6notes.aux"
-  "lecture6notes.log"
-  "lecture6notes.pdf"
+  "lecture7notes.aux"
+  "lecture7notes.log"
+  "lecture7notes.pdf"
   (rewritten before read)

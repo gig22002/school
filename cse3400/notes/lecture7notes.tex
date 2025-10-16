@@ -3,6 +3,97 @@
 \usepackage[left=1.5cm, right=2cm]{geometry}
 \begin{document}
 
-Template
+\textbf{Hash-Based MAC}\\
+Hash-based MAC is often faster than block cipher-based MACs.\\
+How? Heurestic constructions:\begin{itemize}
+	\item \textbf{Prepend Key:} $MAC_k^{PK}(m)=h(k||m)$
+	\item \textbf{Append Key:} $MAC_k^{AK}(m)=h(m||k)$
+	\item \textbf{Message-in-the-Middle:} $MAC_k^{MitM}(m)=h(k||m||k)$
+\end{itemize}
+Are these secure assuming CRHF? OWF? Both? \textbf{No, since it's a MAC}\\
+But: all are "secure in the random oracle model:" when the hash function is assumed to behave like a random function.\\
+
+\textbf{Hash-based MAC: HMAC}\\
+HMAC uses an unkeyed hash function $h$:
+\[HMAC_k(x)=h(k\oplus opad||h(k\oplus ipad||x))\]
+$opad,\ ipad$: fixed sequences (of 36x, 5Cx respectively).\\
+It is a secure MAC under "reasonable assumptions"\\
+Widely deployed\\
+More results, more exposure $\rightarrow$ confidence!\\
+Hash functions are useful for MACs in another way:\\
+Hash the MAC for efficiency.\\
+
+\textbf{Accumulators}\\
+Generalization of collision-resistant hash\begin{itemize}
+	\item Input is a \textbf{sequence (ordered list)} of messages
+	\item Output is $n$-bit \textbf{digest}, denoted $\Delta$
+\end{itemize}
+Collision resistance accumulator means that it is hard to find two different message lists that have the same digest.\\
+IRL, you don't have the full list in advance. You are computing the digest online (on the fly): \textit{accumulating} new messages to digest.\\
+
+\textbf{Accumulator Components}\\
+Digest function $\Delta : \{m_i\epsilon \{0,1\}^*\}\rightarrow\{0,1\}^n$\begin{itemize}
+	\item Also called accumualte function
+	\item Collision-resistance requirement
+\end{itemize}
+Proof of inclusion: $PoI$ and $VerPoI$\begin{itemize}
+	\item $PoI$ function: compute Proof of Inclusion
+	\item $VerPoI$ function: verify Proof of Inclusion
+	\item Optional, also Proof of Non-Inclusion ($PoNI$)
+\end{itemize}
+Extending the Sequence: Extend function with optional $PoC$ and $VerPoC$\begin{itemize}
+	\item $PoC$: Proof of Consistency (from old digest to new)
+	\item $VerPoC$ function: verify PoC
+\end{itemize}
+
+\textbf{Correctness and Security for PoI and PoC}\\
+If you output in an honest way, then the validation algorithm must accept that proof.\\
+Correctness means that on input a valid PoI, VerPoI will output 1 (same for PoC).\\
+For PoI: security means that a PPT adversary cannot forge a valid PoI for a message that is not in the hashed list.\\
+For PoC: security means that a PPT adversary cannot forge a valid PoC for an invalid digest extension.\\
+
+\textbf{We will study three accumulator types}\begin{itemize}
+	\item Merkle-Damgard Accumulators
+	\item Merkle Trees
+	\item Blockchains
+\end{itemize}
+
+\textbf{The Merkle-Damgard Accumulator}\\
+Idea: hash iteratively, message by message:
+\[\Delta(m_1,...,m_l)=h(\Delta(m_1,...,m_{l-1})||1||m_l)\ ;\ \Delta(m_1)=h(0^{n+1}||m_1)\]
+If $h$ is a CRHF, then $\Delta$ is a collision-resistant digest.\\
+
+\textbf{Merkle-Damgard Length-Padding}\\
+Aka Merkle-Damgard Strengthening\\
+Let $pad(x)=1||0^k||bin(|x|)\ ;\ x'=x||pad(x)$ (where $bin(|x|)$ is the $n$-bit binary representation of $|x|$\\
+For $i=1,...,l$ where $l=\frac{|x'|}{n}$, and let $x'_i=$ the $i^{th} n$-bit block of $x'$\\
+Apply the construction in the prior section to obtain the digest of $x'$\\
+This is just a high level idea, care is needed to avoid collisions.\\
+
+\textbf{The Digest-Chain Extend Function}\\
+Beyond digest and collision resistance: sequence-related integrity mechanisms\\
+For digest-chain, the \textbf{extend function}\\
+Not secure to be used to construct a MAC\\
+
+\textbf{The Merkle Tree Construction}\\
+Reduce length of "proofs" - send less hashes of "other messages"\\
+Use binary tree.
+\[MT\Delta(M)=\begin{cases}
+	h(m_1) & If\ L=0\\
+	h(MT\Delta(m_1,...,m_{2^{L-1}})||MT\Delta(m_{2^{L-1}+1},...,m_{2^L})) & otherwise
+\end{cases}\]
+
+\textbf{Two-Layered Merkle Tree}\\
+Short digest validates integrity of large object (often, object consists of multiple "files")\\
+Merkle Tree; integrity for many messages\begin{itemize}
+	\item Hash each "message" in the block, tehn hash of hashes.
+		\[\delta=h(h(m_1)||h(m_2)||h(m_3)||h(m_4))\]
+	\item Validate each "message" independently
+\end{itemize}
+You are given the root of the MT\\
+PoI: message must be part of root\\
+How to compute root? PoI must be the full list?\\
+Verify: $\delta'=h(h(m_1)||...||h(m_4))$, $\delta\overset{?}{=}\delta'$\\
+Can verify with just $m_1$ and the other hashes ($h(m_2)||h(m_3)||h(m_4)$) (hash $m_1$, concatenate and verify)\\
 
 \end{document}
