@@ -33,7 +33,7 @@ IRL, you don't have the full list in advance. You are computing the digest onlin
 
 \textbf{Accumulator Components}\\
 Digest function $\Delta : \{m_i\epsilon \{0,1\}^*\}\rightarrow\{0,1\}^n$\begin{itemize}
-	\item Also called accumualte function
+	\item Also called accumulate function
 	\item Collision-resistance requirement
 \end{itemize}
 Proof of inclusion: $PoI$ and $VerPoI$\begin{itemize}
@@ -77,16 +77,18 @@ Not secure to be used to construct a MAC\\
 
 \textbf{The Merkle Tree Construction}\\
 Reduce length of "proofs" - send less hashes of "other messages"\\
-Use binary tree.
+Use binary tree.\\
+Hash leaves, hash those hashes together, hash the hashes of hashes, etc..
 \[MT\Delta(M)=\begin{cases}
 	h(m_1) & If\ L=0\\
 	h(MT\Delta(m_1,...,m_{2^{L-1}})||MT\Delta(m_{2^{L-1}+1},...,m_{2^L})) & otherwise
 \end{cases}\]
+$m_1, ..., m_{32}$; $|PoI| = 5 = \log_2(32)$; Number of Levels = 6 (5+Root Hash)\\
 
 \textbf{Two-Layered Merkle Tree}\\
 Short digest validates integrity of large object (often, object consists of multiple "files")\\
 Merkle Tree; integrity for many messages\begin{itemize}
-	\item Hash each "message" in the block, tehn hash of hashes.
+	\item Hash each "message" in the block separately, then hash of hashes.
 		\[\delta=h(h(m_1)||h(m_2)||h(m_3)||h(m_4))\]
 	\item Validate each "message" independently
 \end{itemize}
@@ -95,5 +97,14 @@ PoI: message must be part of root\\
 How to compute root? PoI must be the full list?\\
 Verify: $\delta'=h(h(m_1)||...||h(m_4))$, $\delta\overset{?}{=}\delta'$\\
 Can verify with just $m_1$ and the other hashes ($h(m_2)||h(m_3)||h(m_4)$) (hash $m_1$, concatenate and verify)\\
+Therefore, to verify you must send the message that is supposedly in the tree with the PoI being the hash of all the other messages\\
+
+\textbf{Differences between Accumulators and Hash Function}
+\begin{itemize}
+	\item Hash takes one messages and outputs one digest
+	\item Accumulators take a set of messages and can extend the digest with a new set
+\end{itemize}
+
+
 
 \end{document}

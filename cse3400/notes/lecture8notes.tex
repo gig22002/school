@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\textbf{\underline{Blockchains}}\\
+
+\textbf{Blockchain}\\
+An append only ledger.\begin{itemize}
+	\item An immutable record of all transactions and actions performed in the system so far.
+	\item Each page of this ledger is called a block.
+	\item These pages are "glued" together via a hash chain.
+	\item Adding a new page on the ledger is done through a process called mining
+\end{itemize}
+
+\textbf{Bitcoin in a Nutshell}\\
+A distributed currency exchange medium open for anyone to join, powered by a P2P network.\\
+Utilize basic cryptographic primitives to control the money flow in the system (hash functions and digital signatures)\\
+Building blocks:\begin{itemize}
+	\item Players: miners and clients.
+	\item Transaction: messages exchanged
+	\item Blockchain: an append only log
+	\item Mining: extending the blockchain
+	\item Concensus: agreeing on the current state of the Blockchain
+\end{itemize}
+
+\textbf{The Blockchain Structure}\\
+Header and Transaction:
+\begin{enumerate}
+	\item Header: H(prev-block) (hash of the previous block's header, hash chain)
+	\item H(transactions) (root of Merkle Tree)
+	\item Difficulty/nonce/... (difficulty of mining)
+	\item Transactions
+	\item Coinbase: special transactions with no inputs and a single output to the miner
+\end{enumerate}
+
+\textbf{Mining}\\
+The miners extend the blockchain with new blocks (and mint new currency)\\
+Done through proof-of-work (needed to prevent Sybil attacks)\\
+Miners solve a hash puzzle, SHA-256(SHA-256(new block header)) < Difficulty Target\\
+For secure hash functions, the only way to find the hash with a given property is to try nonce values until a desired hash is found (solving a hash puzzle)\\
+Verification is very easy, other miners check the validity of all transactions in a block, and then verify the solution of the hash puzzle (the latter is a single hash invocation)\\
+
+\textbf{Required Security Properties}\\
+Need one-way function so you can't reverse the difficulty target.
+
+\end{document}
