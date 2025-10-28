@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\textbf{Fixing Mutual Authentication}
+
+Encryption does not ensure authenticity: use MAC to authenticate messages\\
+Prevent redirection: identify party in challenge\\
+Better to use separate keys for each direction\\
+Prevent replay and reorder\begin{itemize}
+	\item Identify flow and connection
+	\item Prevent use of old challenge: randomness, time, or state
+\end{itemize}
+Do not provide the adversary with oracle access! (like in SNA)\begin{itemize}
+	\item Do not compute values from Adversary
+	\item Include self-chosen nonce in the protected reply
+\end{itemize}
+
+\textbf{Secure Two-Party Handshake Protocol (2PP)}
+
+Use MAC rather than encryption to auth\\
+Prevent redirection: include identities $(A,B)$\\
+Prevent replay and reorder:\begin{itemize}
+	\item Nonces $(N_A,N_B)$
+	\item Separate $2^{nd}$ and $3^{rd}$ flows: 3 vs 2 input blocks
+\end{itemize}
+Provably secure, since MACs are deterministic\\
+New nonces are generated for each flow, prevents concurrent attack\\
+Flow numbers ensure prevention of redirection
+
+\textbf{Authenticated Request-Control Protocols}
+
+Besides authenticating entities, these protocols auth the exchange of a request and a response between the entities.\\
+Required properties:\begin{itemize}
+	\item Request Authentication: the request was indeed sent by the sender.
+	\item Response Auth: the response was indeed sent by the receiver (to which the request was intended for)
+	\item No Replay
+\end{itemize}
+Five variants:\begin{itemize}
+	\item 2PP-RR (two party protocol, request-response)
+	\item 2RT-2PP (2 round trip) (a round trip is two flows)
+	\item Counter-based-RR
+	\item Time-based RR
+	\item Key-exchange (session key)
+\end{itemize}
+
+\textbf{2PP-RR}
+
+A three-flow nonce-based protocol.\\
+Significant drawback:\begin{itemize}
+	\item The request is sent by the responder and the initiator sends the response.
+	\item So, the initiator must wait for a request rather than sending it
+\end{itemize}
+
+\textbf{2RT-PP}
+
+A four-flow nonce-based protocol.\\
+Mainly fixes the drawback of 2PP-RR
+
+\textbf{Counter-Based Authenticated RR}
+
+Simple stateful (counter) solution, requiring only one round:\begin{itemize}
+	\item Unidrectional (if bidirectional is needed, a separate instance of the protocol for each direction needs to be executed)
+	\item Parties maintain synchronized counter $i$ of requests (and responses) to avoid replay attacks
+	\item Recipient validates if counter received is $i+1$
+	\item Both parties must remember the counter
+\end{itemize}
+Counters are only initialized once
+
+\textbf{Time-Based Auth RR}
+
+Simple stateful (time) solution, requiring only one round:\begin{itemize}
+	\item Use local clocks $T_A,T_B$ instead of counters with two assumptions: bounded delays and bounded clock skews
+	\item Responder (Bob):\begin{itemize}
+			\item Rejects request if $T_B>T_A+\Delta$ OR if he received a larger $T_A$ already (where $\Delta=\Delta_{skew}+\Delta_{delay}$)
+			\item Maintains last $T_A$ received until $T_A+\Delta$
+		\end{itemize}
+	\item Initiator does not need any state, when can receiver discard this?
+\end{itemize}
+Don't reuse keys across parties (TWO party protocol)
+
+\textbf{2RT-2PP with Confidentiality}
+
+Secure connection: authentication, freshness, and secrecy\begin{itemize}
+	\item Independent keys: for encryption $k.e$, for auth $k.a$
+	\item How can we derive them both from a single key $k$? The PRF from before: $k.e=PRF_k("Encrypt"),\ k.a=PRF_k("MAC")$
+\end{itemize}
+Improve security by changing keys between sessions?
+
+\textbf{2PP Key Exchange Protocol}
+
+Allows generating independent session keys (i.e. each session will have its own key denoted as $k_i^S$\\
+These keys are derived from the sharedkey that we now call a long-term 'master key' denoted as $k^M$
+
+\end{document}
