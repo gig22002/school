@@ -91,6 +91,74 @@ Improve security by changing keys between sessions?
 \textbf{2PP Key Exchange Protocol}
 
 Allows generating independent session keys (i.e. each session will have its own key denoted as $k_i^S$\\
-These keys are derived from the sharedkey that we now call a long-term 'master key' denoted as $k^M$
+These keys are derived from the shared key that we now call a long-term 'master key' denoted as $k^M$\\
+Improves security:\begin{itemize}
+	\item Exposure of a session key does not expose the master key, or keys of other sessions
+	\item Thus, limited amount of ciphertext is exposed if a session key is exposed (only that session, rather than all the ciphertexts of other sessions)
+\end{itemize}
+$A,N_{A.i}$\\
+$N_{A.i},N_{B.i}, PRF_{k^M}(2||'A\leftarrow B||N_{A.i}||N_{B.i})$\\
+$N_{B.i},PRF_{k^M}(3||'A\rightarrow B'||N_{A.i}||N_{B.i})$\\
+Session key: $k_i^S = PRF_{k^M}(N_{A.i}||N_{B.i})$\\
+Use session key to generate MAC and Encryption key\\
+A secure PRF is also a secure MAC, this example uses only one cryptographic primitive (the PRF, for session key and handshake).\\
+You can't use the same key against two different crypto primitives
+
+\textbf{Key Distribution Center (KDCs)}: Establish a shared key b/w two or more entities, usually with the help of a trusted 3rd party reference
+
+\textbf{KDC}\\
+Has huge trust assumption based on centralization\\
+Will focus on three party protocols: Alice, Bob, and KDC\\
+KDC: shares long-term master keys with all parties (each party will have a key for encryption and another for MAC)\begin{itemize}
+	\item Denoted as $k_A^M,k_B^M,...$ for MAC and $k_A^E,k_B^E,...$ for encryption
+\end{itemize}
+Goal: help parties (A, B) to \underline{establish} a shared master key $k_{AB}$, based on which the parties generate two keys for MAC and encryption, namely $k^M_{AB}$ and $k^E_{AB}$\\
+We will study simplified versions of Kerberos (secure) and GSM (insecure)
+
+\textbf{The Kerberos KDC Protocol}\\
+KDC Shares keys $k_A^E$ (enc), $k_A^M$ (MAC) with Alice, and $k^E_B,k^M_B$ with Bob\\
+Goal: Alice and Bob share $k_{AB}^M$, then derive $k^E_{AB},k^M_{AB}$\\
+KDC performs access control as well, controlling with whom Alice can contact\\
+Uses timestamp for freshness\\
+If an attacker compromises the KDC, they have control over the master key and can therefore decrypt any message
+
+\textbf{The GSM Handshake Protocol}\\
+Mobile client, identified by $i$ (IMSI: International Mobile Subscriber Identifier)\\
+Visited network (aka Base station), not fully trusted\\
+Home network: trusted, shares key $k_i$ with client $i$\\
+A5 function used to generate OTP is not a PRF (not secure)
+
+\textbf{Attacks on GSM Handshake Protocol}\\
+Visited network impersonation replay attack\\
+Ciphersuite downgrade attack
+
+\textbf{Visited-Network Impersonation Attack}\\
+Cryptanalysis phase: attacker exposes $K_c$ based on the cyphertexts it collected in the eavesdropping phase\\
+In the impersonate phase, the attacker will send the same $r$ and $s$ from before (replay attack), which will lead to the same $K_c$ it obtained in the cryptanalysis phase\\
+GSM is using weak primitives that can be broken (OWF but not PRF A5/1, A5/2)\\
+GSM doesn't check for freshness with $r$ or session key.
+
+\textbf{GSM Ciphersuite Downgrade Attack}\\
+Can be used to setup Visited-Network attack\\
+A ciphersuite is the set of cryptographi cschemes used in protocol execution\\
+Ciphersuite negotiation:\begin{itemize}
+	\item Mobile sends a list of cipher-suites it supports
+	\item Visited netwrk selected the strongest/most secure one that it also supports
+	\item Goal of negotiation is to support interoperability b/w devices of different capabilities
+\end{itemize}
+A MitM attacker may trick these parties to use a weak suite (even if they can support a stronger one)\\
+Works due to key reuse in GSM (same key is used across various encryption schemes)
+
+\textbf{Improving Resiliency to Key Exposure}
+
+\textbf{Forward Secrecy}\\
+So far: session key $k_i^S \nRightarrow k_j^S$ (expose no other keys), and master key was fixed for all sessions.\\
+Idea; Change the master key each session: $k_1^M,k_2^M,...$\\
+Forward Secrecy (FS): \underline{master} key $k_i^M \nRightarrow k_j(j<i)$\\
+I.e., $k_i^M$ (and $k_i^S$) don't expose keys, communication of \underline{previous} sessions $(j<i)$\\
+Gives secrecy to the past (but not the future)
+
+\textbf{Forward Secrecy 2PP Key Exchange}\\
+This protocol generates a different master key for each session $i$ denoted as $k_i^M$
 
 \end{document}
