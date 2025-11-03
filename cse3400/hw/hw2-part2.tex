@@ -1,0 +1,109 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,epsfig,boxedminipage,helvet,theorem,endnotes,version}
+\usepackage{mathtools}
+\newcommand{\remove}[1]{}
+\setlength{\oddsidemargin}{-.2in}
+\setlength{\evensidemargin}{-.2in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.8in}
+\setlength{\textheight}{9.5in}
+
+
+\newtheorem{theorem}{Theorem} 
+\newtheorem{definition}{Definition}
+
+\newcommand{\gen}{\mbox{\tt Gen}}
+\newcommand{\enc}{\mbox{\tt Enc}}
+\newcommand{\dec}{\mbox{\tt Dec}}
+
+\newcommand{\sol}{{\bf Solution}: }
+
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\zoell}{\{0,1\}^\ell}
+\newcommand{\zon}{\{0,1\}^n}
+\newcommand{\zok}{\{0,1\}^k}
+
+%% eg \priv{eav}{n,b} for def 3.9 style, or \priv{eav}{n} for def 3.8
+\newcommand{\priv}[2]{${\tt Priv}_{A,\Pi}^{\tt #1}(#2)$}
+
+\newcommand*\concat{\mathbin{\|}}
+
+\newcommand\xor{\oplus}
+
+\newcommand{\handout}[2]{
+\renewcommand{\thepage}{\footnotesize CSE 3400/CSE 5850, #1, p. \arabic{page}}
+\begin{center}
+
+\noindent
+{\bf UConn, School of Computing}
+
+\noindent
+{\bf Fall 2025}
+
+\noindent
+{\bf CSE 3400/CSE 5850: Introduction to Cryptography and Cybersecurity \\/ Introduction to Cybersecurity}
+\end{center}
+
+\begin{center}
+{\Large #1}
+\end{center}
+}
+
+
+
+\begin{document}
+
+\handout{Assignment 2---Part 2}{}
+
+\noindent
+{Instructor: Prof.~Ghada Almashaqbeh}
+
+\noindent
+{Posted: 10/23/2025}
+
+\noindent
+{Submission deadline: 10/31/2025, 11:59 pm} \\
+Last day to submit late is 11/3/2025, 11:59 pm\\\\
+
+\noindent{\bf Note:} Solutions {\bf must be typed} (using latex or any other text editor) and must be submitted as a pdf (not word or source latex files).\\
+
+\noindent{\bf Problem 1 [30 points]\\}
+Let $G:\zo^{n/2} \to \zo^{n}$ be a secure PRG, and $F:\zo^n \times \zo^n \to \zo^n$ be a secure PRF. For each of the following MAC constructions, state whether it is a secure MAC and justify your answers.
+\begin{enumerate}
+\item Given message $m \in \zo^{3n/2}$, parse $m$ as $m = m_1 \concat m_2$ where $|m_1| = n$ and $|m_2| = n/2$. Then compute the tag as $MAC_k(m) = F_k(m_1 \xor F_k(G(m_2)))$.
+
+\item Given message $m \in \zo^{n/2}$, compute $MAC_k(m) = F_k(m \concat 1^{n/2}) \concat F_k(m \concat 0^{n/2})$.
+
+\item Given message $m \in \zo^{n}$, compute the tag as (where $l2sb$ is the least significant 2 bits of $m$ and $\bar{m}$ is the bit negation or complement of $m$):
+\[ MAC_k(m)= \left\{
+\begin{array}{ll}
+      F_k(\bar{m}) & \text{, if } l2sb(m) = 01 \\
+      F_k(m)  & \text{, otherwise} \\
+\end{array} 
+\right.\]
+\end{enumerate} 
+
+\noindent{\bf Note:} If the scheme is insecure then show an attack and analyze the adversary's advantage. If the scheme is secure, just provide a convincing argument (formal security proofs are not required) and state why the attacker advantage is negligible.\\
+
+\noindent{\bf Problem 2 [40 points; there are 10 points extra here]\\}
+Let $h_1:\zo^{*} \to \zo^{n}$ be a CRHF hash function (but not OWF) and $h_2: \zo^{*} \to \zo^{n}$ be a OWF hash function (but not CRHF), based on that answer the following: 
+\begin{enumerate}
+    \item Construct a new hash function $h'$ as follows: $h'(m) = h_1(m_1) \concat h_2(m_2)$ such that $m = m_1 \concat m_2$ (so split $m$ into two halves). Is $h'$ a CRHF? Justify your answer.
+    
+    \item Construct a new hash function $h''$ as follows: $h''(m) =h_2\big(h_1(m) \xor h_2(m)\big)$. Is $h''$ a OWF? is it a CRHF? Justify your answers.
+    
+    \item For the software distribution application (lecture 6, slide 18), Sponge proposed the following for the LA developer: use a hash function $h^*(m) = h_1(h_2(m))$ in that application. while Alice proposed to use a hash function $h^{**}(m) = h_2(h_1(m))$. Which proposal will preserve the security of the application (i.e., NY user will be able to detect any manipulations in the software distributed by the DC repo)? Justify your answer.
+
+    \item Sponge constructed a Merkle tree (the binary-tree based one) for a database composed of 16 files. The files are named as $f_1, f_2, \dots, f_{16}$, and when constructing the tree these files are ordered from left to right, i.e., $f_1$ is the leftmost leave and so on. Also, each file is of size 1215 bytes. Sponge used SHA-384 for the hash function $h$ when constructing the tree, where SHA-384 has an output size of 384 bits (or 48 bytes). The tree root is published in the newspaper, and thus is known to everyone. Based on that answer the following:
+\begin{enumerate}
+    \item How many nodes does the tree have including the leaf level (treat a file and its hash as one node in the leaf level)? What is the total size of the tree including the files?
+    
+    \item Sponge wants to prove to Eve that file $f_{13}$ is a member of the tree. What is the proof of inclusion (PoI) that Sponge will send to Eve? what is the total size of that proof (including the file itself)? How will Eve verify this PoI?
+\end{enumerate}
+\end{enumerate}
+
+\noindent{\bf Note:} We know that unkeyed hash functions cannot be CRHF, all the functions we have above are keyed but for simplicity the keys are omitted. \\
+
+\noindent{\bf Note:} If the scheme is insecure (i.e., not a CRHF or not a OWF, based on the question) then provide an attack against it and analyze its success probability. If the scheme is secure (i.e., a CRHF or a OWF, based on the question), just provide a convincing argument (formal security proofs are not required) and state whether the success probability of the attacker is negligible. \\
+
+\end{document} 
