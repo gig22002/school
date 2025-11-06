@@ -1,0 +1,123 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\textbf{Public Key Cryptography}
+
+\textbf{Public Key Cryptography}
+
+Kerckhoff's Principle: the cryptosystem (algorithm) is public\\
+\textit{Symmetric or shared key}: only the key is secret, used both for encryption and decryption. Shared keys for MACs, PRFs, etc..\\
+\textit{Asymmetric} cryptographic capability: encryption capability without decryption capability.
+
+\textbf{Public Key Cryptosystem (PKC}
+
+Kerckhoff: cryptosystem (algorithm) is public\\
+DH76: can encryption key be public too?\begin{itemize}
+	\item Decryption key will be different (and private)
+	\item Everybody can send me emails, but only I can read them.
+\end{itemize}
+
+\textbf{Is it Only About Encryption?}
+
+Also: digital signatures for integrity and non-repudiation.\\
+Sign with private key $s$, verify with public key $v$.\\
+Recall MACs: a shared key cryptosystem for message authentication\\
+Private signing key, public validation key
+
+\textbf{More: Key-Exchange Protocols}
+
+Establish shared key between Alice and Bob without assuming an existing shared (master) key\\
+Use public information from Alice and Bob to setup shared key $k$\\
+Eavesdroppers cannot learn the key $k$
+
+\textbf{Public keys solve more problems}
+
+Signatures provide evidence (everyone can validate, only owner can sign)\\
+Established shared secret keys\begin{itemize}
+	\item Use authenticated public keys, signed by trusted certificate authority
+	\item Or use DH (Diffie Hellman) key exchange
+\end{itemize}
+Stronger resiliency to key exposure\begin{itemize}
+	\item Perfect forward secrecy and recover security
+	\item Threshold security: resilient to key exposure of $t$ out of $n$ parties
+\end{itemize}
+
+\textbf{Public keys are easier...}
+To distribute: from directory or from incoming message (still require authentication), and less keys to distribute\\
+To maintain: can keep in non-secure storage as long as being validated before using. Also less keys: $O(|parties|)$ versus $O(|parties|^2)$\\
+So why not always use public key crypto?
+
+\textbf{The Price of PKC}
+
+Assumptions:
+Applied PKC algorithms are based on a small number of specific computational assumptions\begin{itemize}
+	\item Mainly: hardness of factoring and discrete-log
+	\item Both may fail against quantum computers
+\end{itemize}
+Overhead:\begin{itemize}
+	\item Computational
+	\item Key length (public key is long)
+	\item Output length (e.g. ciphertext or signature)
+\end{itemize}
+
+\textbf{Public key crypto is harder...}
+
+Requires related public, private keys\begin{itemize}
+	\item Usually we say a keypair (pk, sk)
+	\item Public key does not expose private key
+\end{itemize}
+Substantial overhead\begin{itemize}
+	\item Successful cryptanalytic shortcuts $\rightarrow$ need long keys
+	\item Elliptic curves (EC) may allow shorter keys (almost no shortcuts found)
+	\item Complex computations, e.g. complex (slow) keygen
+\end{itemize}
+
+\textbf{In summary}
+
+Minimize use of PKC\\
+If possible, minimize length of the input\\
+How?\\
+For signatures, hash-then-sign\\
+For public-key encryption, hybrid encryption
+
+\textbf{Hybrid Encryption}
+
+Challenge: public key cryptosystems are slow\\
+Hybrid encryption:\begin{itemize}
+	\item Use a shared key encryption scheme to encrypt all messages,
+	\item But use a public key encryption scheme to exchange the shared key\begin{itemize}
+			\item Alice generates $k$, encrypts it under Bob's public key and sends the ciphertext $c_k$ to Bob.
+			\item Bob can decrypt and recover $k$, and use $k$ to decrypt $c_M$
+		\end{itemize}
+\end{itemize}
+
+\textbf{Number Theory Review}
+
+$(a+b) \mod m = [(a \mod m) + (b \mod m)] \mod m$
+
+\textbf{Multiplicative Inverse}
+
+To compute $a/c \mod m$, multiply $a$ by the multiplicative inverse of $c$\\
+That is, compute $a/c\mod m = ac^{-1}\mod m$\\
+Where $c^{-1}$ is the multiplicative inverse such that $cc^{-1}\mod m=1$\\
+Not all ints have multiplicative inverses with respect to a specific modulus $m$.
+
+\textbf{Modular Exponentiation}
+
+Encountered a lot: discrete log scheme, RSA, etc\\
+Fermat's Little Theorem (for prime modulus):
+\[
+	a^b \mod p = (a\mod p)^{b\mod(p-1)} \mod p
+\]
+
+\textbf{Key Exchange}
+
+\textbf{Defining a Key Exchange Protocol}
+
+Must satisfy:\\
+Correctness: both parties compute the same shared key\\
+Key Indistinguishability: the key that the two parties establish is indistinguishable from random
+
+\end{document}
