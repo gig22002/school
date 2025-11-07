@@ -21,42 +21,42 @@ std::map<char, char> ECCreateSpiralCipherMap() {
 		cout << endl;
 	}
 	
-	vector<vector<int>> _visited(10, vector<int>(10, 0));
-	vector<int> rowMoves = {0,1,0,-1};
-	vector<int> colMoves = {1,0,-1,0};
-	int r=0; int c=0;
-	int index=0;
+	int top=0; int bottom=8;
+	int left=0; int right=9;
 
-	for(int i=0; i<100; i++){
-		_visited[r][c] = 1;
-		//cout << _matrix[r][c] << endl;
+	while (top <= bottom && left <= right){
+		for (int i=left; i<=right; i++){
+			_map[_matrix[top][i]]=_matrix[top][i+1];
+		}
+		top++;
 
-		int newR = r+rowMoves[index];
-		int newC = c+colMoves[index];
+		for (int i=top; i<=bottom; i++){
+			cout << _matrix[i][right] << endl;
+			_map[_matrix[i][right]]=_matrix[i+1][right];
+		}
+		right--;
 
-		if(_matrix[r][c] != 0){
-			_map[_matrix[r][c]] = _matrix[newR][newC];
-			//cout << _matrix[newR][newC] << endl;
+		if (top<=bottom){
+			for (int i=right; i>=left; i--){
+				char temp = _matrix[bottom][i-1];
+				if (temp==0) continue;
+				_map[_matrix[bottom][i]]=temp;
+			}
+			bottom--;
 		}
 
-		if (0<=newR && newR<10 && 0<=newC && newC<10 && !_visited[newR][newC]){
-			r=newR;
-			c=newC;
-		} else{
-			index=(index+1)%4;
-			r+=rowMoves[index];
-			c+=colMoves[index];
+		if (left<=right){
+			for (int i=bottom; i>=top; i--){
+				_map[_matrix[i][left]]=_matrix[i-1][left];
+			}
+			left++;
 		}
 	}
 
+	_map[' '] = '!';
+	_map['~'] = ' ';
 	_map[')'] = '3';
 	_map['*'] = '+';
-	_map['y'] = 'z';
-	_map['z'] = '{';
-	_map['{'] = '|';
-	_map['|'] = '}';
-	_map['~'] = ' ';
-	_map['x'] = 'n';
 
 	for (auto it=_map.cbegin(); it!=_map.cend(); it++)
 		cout << it->first << ", " << it->second << endl;
@@ -71,7 +71,6 @@ std::string ECEncryptMessage(const std::string& msg, const std::map<char, char>&
 	for (auto x : msg){
 		if (cipher.count(x))
 			out += cipher.at(x);
-		else out += x;
 	}
     
 	return out;
@@ -80,18 +79,12 @@ std::string ECEncryptMessage(const std::string& msg, const std::map<char, char>&
 // 3. Decrypt Message
 std::string ECDecryptMessage(const std::string& encrypted, const std::map<char, char>& cipher) {
 	string out;
-	map<char, char> reverseMap;
-	for (auto it : cipher){
-		reverseMap[it.second] = it.first;
-	}
 
 	for (auto x : encrypted){
-		//int idx = (x-2)<32 ? (126-(33-x)) : (x-2);
-		if (cipher.count(x)){
-			out += reverseMap[x];
-			//out += cipher.at(idx);
-			//cout << x << " " << idx << endl;
-			//cout << cipher.at(idx) << endl;
+		if (cipher.count(x-2)){
+			out += cipher.at(x-2);
+			cout << x << " " << x-2 << endl;
+			cout << cipher.at(x-2) << endl;
 		}
 	}
     
