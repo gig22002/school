@@ -1,0 +1,45 @@
+
+#include <map>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+// 1. Create Spiral Cipher Map
+std::map<char, char> ECCreateSpiralCipherMap() {
+	map<char, char> matrix;
+
+	for (int i=" "; i<"~"; i++){
+		map[i] = "";
+		std::cout << map[i] << std::endl;
+	}
+
+    	return matrix;
+}
+
+// 2. Encrypt Message
+std::string ECEncryptMessage(const std::string& msg, const std::map<char, char>& cipher) {
+
+    
+}
+
+// 3. Decrypt Message
+std::string ECDecryptMessage(const std::string& encrypted, const std::map<char, char>& cipher) {
+
+    
+}
+
+// 4. Character Frequency
+std::map<char, int> ECCharacterFrequency(const std::string& msg) {
+
+    
+}
+
+// 5. Common Characters
+std::vector<char> ECCommonCharacters(const std::string& a, const std::string& b) {
+
+    
+}
+
+
+// Notes: you can run the code with the test cases provided in test-pa5.cpp
+// command - g++ -std=c++17 -Wall -Wextra -o test test-pa5.cpp PA5.cpp

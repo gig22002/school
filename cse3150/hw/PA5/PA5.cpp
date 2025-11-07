@@ -1,37 +1,113 @@
-
+#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 #include <algorithm>
+using namespace std;
 
 // 1. Create Spiral Cipher Map
 std::map<char, char> ECCreateSpiralCipherMap() {
+	map<char, char> _map;
+	vector<vector<char>> _matrix(10, vector<char>(10, 0));
 
-    
+	char x=32;
+	for (int i=0; i<10; i++){
+		for (int j=0; j<10; j++){
+			if(x>126) break;
+			_matrix[i][j]=x++;
+		}
+	}
+	
+	int top=0; int bottom=8;
+	int left=0; int right=9;
+
+	while (top <= bottom && left <= right){
+		for (int i=left; i<=right; i++){
+			_map[_matrix[top][i]]=_matrix[top][i+1];
+		}
+		top++;
+
+		for (int i=top; i<=bottom; i++){
+			_map[_matrix[i][right]]=_matrix[i+1][right];
+		}
+		right--;
+
+		if (top<=bottom){
+			for (int i=right; i>=left; i--){
+				char temp = _matrix[bottom][i-1];
+				if (temp==0) continue;
+				_map[_matrix[bottom][i]]=temp;
+			}
+			bottom--;
+		}
+
+		if (left<=right){
+			for (int i=bottom; i>=top; i--){
+				_map[_matrix[i][left]]=_matrix[i-1][left];
+			}
+			left++;
+		}
+	}
+
+	_map[' '] = '!';
+	_map['~'] = ' ';
+
+	for (auto it=_map.cbegin(); it!=_map.cend(); it++)
+		cout << it->first << ", " << it->second << endl;
+
+    	return _map;
 }
 
 // 2. Encrypt Message
 std::string ECEncryptMessage(const std::string& msg, const std::map<char, char>& cipher) {
+	string out;
 
+	for (auto x : msg){
+		if (cipher.count(x))
+			out += cipher.at(x);
+	}
     
+	return out;
 }
 
 // 3. Decrypt Message
 std::string ECDecryptMessage(const std::string& encrypted, const std::map<char, char>& cipher) {
+	string out;
 
+	for (auto x : encrypted){
+		if (cipher.count(x-2)){
+			out += cipher.at(x-2);
+			cout << x << " " << x-2 << endl;
+			cout << cipher.at(x-2) << endl;
+		}
+	}
     
+	return out;
 }
 
 // 4. Character Frequency
 std::map<char, int> ECCharacterFrequency(const std::string& msg) {
-
+	map<char, int> out;
+	for (auto x : msg){
+		out[x]++;
+	}
     
+	return out;
 }
 
 // 5. Common Characters
 std::vector<char> ECCommonCharacters(const std::string& a, const std::string& b) {
+	vector<char> out;
+	
+	map<char, int> aFreq = ECCharacterFrequency(a);
+	map<char, int> bFreq = ECCharacterFrequency(b);
 
+	for (auto x : a){
+		if (aFreq[x] > 0 && bFreq[x] > 0)
+			out.push_back(x);
+	}
     
+	return out;
 }
 
 
