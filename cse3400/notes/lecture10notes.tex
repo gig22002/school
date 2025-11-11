@@ -112,6 +112,10 @@ Fermat's Little Theorem (for prime modulus):
 	a^b \mod p = (a\mod p)^{b\mod(p-1)} \mod p
 \]
 
+\textbf{Group Theory Review}
+
+A group G is a cyclic if there is a an element $g \epsilon G$ s.t. for every element $a\epsilon G$, there is an int $i$ s.t. $a=g^i$. Such an element $g$ is called a generator of $G$. The order of $G$ is the total.
+
 \textbf{Key Exchange}
 
 \textbf{Defining a Key Exchange Protocol}
@@ -119,5 +123,46 @@ Fermat's Little Theorem (for prime modulus):
 Must satisfy:\\
 Correctness: both parties compute the same shared key\\
 Key Indistinguishability: the key that the two parties establish is indistinguishable from random
+
+\textbf{Discrete Log Problem}
+
+A computationally hard problem that is hard to solve but easy to verify\\
+Given a generator $g$ and an element $a\epsilon G$, find $i$ s.t. $a=g^i$. Verification: exponentiation (efficient algorithm)\\
+Computing log is quite efficient over the real numbers. But is discrete-log hard?\begin{itemize}
+	\item Weak, where it's not hard: prime $p$ where $(p-1)$ has only 'small' prime factors, mistakes/trapdoors found
+	\item Safe-prime groups: $p=2q+1$, where $q$ is sufficiently large
+\end{itemize}
+Group needs to be big, cyclic with generator, and discrete log problem within group to be hard.\\
+Game: pick random element in group. First, pick the power (random int) and then compute the element as the generator to that power. Attacker is given $g^y$, where they must compute $y$.\\
+$y$ is the secret key, the public key is $g^y$.
+
+\textbf{The Diffie-Hellman (DH) Key Exchange Protocol and The Computational/Decisional Diffie-Hellman Assumptions (CDH/DDH)}
+
+\textbf{DH Key-Exchange}
+
+Setup: agree on a random safe (large) prime $p$ and generator $g$ for the cyclic multiplicative group $Z_p^*$.\\
+Alice: pick at random a secret int $a$ from $Z_p^*$, then compute $P_A=g^a\mod p$, and send $P_A$ to Bob.\\
+Bob: pick at random secret int $b$ from $Z_p^*$, then compute $P_B=g^b\mod p$, and send $P_B$ to Alice.\\
+Both parties: compute the shared key $k=g^{ab}\mod p$\\
+$(g^b)^a=g^{ab}=(g^a)^b\mod p$; Alice raises Bob's $g^b$ to the $a^{th}$ power, and vice versa.\\
+Correctness: two parties establish identical, long-enough, and random key.
+
+\textbf{Caution: Auth the Public Keys!}
+
+DH Key-Exchange is only secure against eavesdroppers, but not MitM attackers (since they can change the messages)\\
+So, the public messages being sent must be authenticated, e.g. using digital signatures.
+
+\textbf{Security of DH Key Exchange}
+
+Assume authenticated comms.\\
+DH key exchange requires stronger assumption than discrete log\\
+The Computational Diffie-Hellman (CDH) Assumption: given $g^b\mod p$ and $g^a\mod p$, an efficient adversary cannot compute $g^{ab}\mod p$ with non-negligible probability.\\
+So DH key exchange protocol is secure for groups in which the CDH assumptions holds.
+
+\textbf{Using DH Securely?}
+
+Can $g^a,\ g^b$ expose \textit{something} about $g^{ab}\mod p$? Finding at least on ebit about it is easy\\
+Option 1: use DH but with a stronger group where $g^a,g^b,g^c$ are indistinguishable\\
+Option 2: use DH with Z and safe prime (where only CDH holds), but use a key derivation function to derive a secure shared key (like a randomness-extracting hash function).
 
 \end{document}
