@@ -1,10 +1,24 @@
 #include "ECSportsPlayer.h"
 
+class ECTournament{
+	public:
+		ECTournament(int month, int mr) : month(month), minRank(mr) {}
+		int GetMonth() const { return month; }
+		int GetMinRank() const { return minRank; }
+	private:
+		int month;
+		int minRank;
+}
+
 // ********************************************
 // Generic player
 bool ECSportsPlayer :: CanPlay(ECTournament &tr) const
 {
   // your code
+  if (NegativePlay(tr)){
+	return false;
+  }
+  return PositivePlay(tr);
 }
 
 // ********************************************
@@ -13,6 +27,12 @@ ECSportsPlayerRanked :: ECSportsPlayerRanked(int r) : rank(r)
 {
 }
 
+class ECSportsPlayerDec : public ECSportsPlayer{
+	public:
+		ECSportsPlayerRanked(int r);
+	private:
+
+}
 
 
 // ********************************************
