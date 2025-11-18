@@ -1,0 +1,154 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\textbf{Public Key Infrastructure}
+
+\textbf{Public Keys are very useful}
+
+Secure web connections\\
+Software signing\\
+Secure messaging, email\\
+Cryptocurrency, blockchains\\
+How do we know the public key of an entity? And how can we trust that this entity is indeed who they claim to be and that they own a specific public key? Mainly: the key must be signed by a trusted Certificate Authority (CA)\\
+Public Key Infrastructure (PKI) defines how to issue, manage, and use such certificates
+
+\textbf{Public Key Certificates \& Authorities}
+
+The big picture: when receiving a party's (the subject's) public key, it will be accompanied with a certificate. A valid cert means that the entity is who they claim to be and they own the corresponding public key\\
+Certificate: signature by a CA over subject's public key and attributes\\
+Attributes: identity (ID) and others (e.g. location)\begin{itemize}
+	\item Validated by CA (liability?)
+	\item Used by relying party for decisions
+\end{itemize}
+Root CA is most trusted in the hierarchy
+
+\textbf{Certificates are all about Trust}
+
+\textbf{Rogue Certs}
+
+Rogue certificate: certificates that contain wrong or misleading information (so they \textit{should} fail PKI validation)\\
+Attacker goals:\begin{itemize}
+	\item Impersonate: website, phishing email, signed malware...
+	\item Equivocating (same name): circumvent name-based security mechanisms such as blacklists, access-control..
+\end{itemize}
+Types of misleading names:\begin{itemize}
+	\item Combo names: bank.com vs accts-bank.com, bank.accts.com
+	\item Domain-name hacking: accts.bank.com vs accts-bank.com, accts.bank.co
+	\item Homographic: paypal.com vs paypaI.com
+	\item Typo-squatting: banc.com, baank.com
+\end{itemize}
+
+\textbf{PKI Failures}
+
+Although the signature over the cert verifies correctly, there is still a failure and the cert may be revoked: this is called a PKI failure\\
+PKI failures include:\begin{itemize}
+	\item Corrupt CA
+	\item Validation failure
+	\item Exposed CA private key
+	\item Cryptanalysis cert forgery: find collisions in HtS paradigm, or exploit some vulnerability in the digital signature scheme used for signing
+\end{itemize}
+
+\textbf{X.509 Certificates}
+
+\textbf{The X.509 Standard Certificate Format}
+
+Idea: signature binds public key to distinguished name (DN) and to other attributes\\
+Used widely despite complaints about its complexity: SSL/TLS, code-signing, IP-Sec, ...\\
+Signed Fields:\begin{enumerate}
+	\item Version
+	\item Cert serial number
+	\item Signature Algorithm Object Identifier (OID)
+	\item Issuer Distinguished Name (DN)
+	\item Validity period (make sure it's time-limited)
+	\item Subject (user) DN
+	\item Subject public key info
+\end{enumerate}
+Then, signature
+
+\textbf{X.509 Certs and Subject Identifiers}
+
+V1: Distinguished Name (for subject and issuer)
+V2: Unique Identifiers (for subject and issuer)
+V3: Extensions (used in practice)
+
+\textbf{Distinguished Names}
+
+Most certs contain identifiers\\
+Influenced by telecom providers: phone directory services are based on common names\\
+Basic goals of identifiers:\begin{itemize}
+	\item Meaningful (to humans)
+	\item Unique identification of entity (owner)
+	\item Decentralized, with accountability
+\end{itemize}
+
+\textbf{The Identifiers Trilemma}
+
+Achieving the three goals: Meaningful, Unique, Decentralized, seems very challenging\\
+Examples of achieving any \underline{two} of the goals:\begin{itemize}
+	\item Unique + Meaningful: URL, email
+	\item Meaningful + Decentralized: common name
+	\item Unique + Decentralized: hash of key
+\end{itemize}
+
+\textbf{X.509 Validation of Certificate Paths}
+
+Have Root CA, with ICAs (intermediary CA) and LCAs (leaf CAs)\\
+Only leaf CAs interact with end users.\\
+Simply validate all certs in the chain all the way to the root CA\\
+The root CA (self-signed) cert is in the root store in Alice's browser
+
+\textbf{Certificate Revocation}
+
+Reasons for revoking:\begin{itemize}
+	\item Security issues: key compromised, CA compromised
+	\item Administrative issues: change name, location
+\end{itemize}
+Techniques
+
+\textbf{Certificate Revocation List (CRL)}
+A CRL is simply a list of revoked certs, distributed periodically by CAs\\
+If CRLs contain all revoked certs (which did not expire) it could be huge!\\
+CRLs are not immediate: who is responsible until CRL is distributed. Frequent CRLs $\rightarrow$ even more overhead
+
+\textbf{CRL Optimization Solutions}
+
+CRL distribution point: split certs to several CRLs\\
+Authorities Revocation List (ARL): list only revoked CAs (very coarse grain, revoking CAs as a whole but not necessarily individuals)\\
+Delta CRL: only new revocations since last "base" CRL-- need to keep CRLs for a long period to check deltas\\
+Another more efficient approach is the Online Certificate Status Protocol (OCSP)
+
+\textbf{Online Certificate Status Protocol (OCSP)}
+
+Improve efficiency and freshness compared to CRLs\\
+Client asks CA about cert during handshake\\
+CA signs response (real-time)\\
+Adds additional delay to access time\\
+Tradeoff: less cost, but higher latency
+
+\textbf{OCSP Challenges}
+
+Privacy (expose domain and client to CA), load on CA, response delay, reliability (what if CA fails)\\
+Ambiguity: when an OCSP server (or CA) cannot resolve the request, it replies with "certificate status is unknown"\\
+Reliability or failed requests: client failed to establish connection with OCSP server, or client's request is invalid (not signed, or not authorized) so no response will be received.
+
+\textbf{Ambiguous/Failed OCSP Responses}
+
+What should client do?\\
+Wait forever? Unrealistic\\
+Hard-fail: terminate connection since certificate is unknown/not received (safe!)\\
+Ask user: application displaying message asking user how they want to proceed\\
+Soft-fail: pretend that a response has been received and continue as if the cert is not revoked (common choice for browsers, but a MitM attacker may block the OCSP response to make a revoked cert go through)
+
+\textbf{Conclusion}
+
+PKI is an essential component of the internet\\
+Yet, it is a complicated module with many issues related to security, privacy, and performance\begin{itemize}
+	\item To many, this is a solved problem (but that is not the case)
+	\item Several open questions related on how to detect rogue certs, handle CA failure, revocation ,etc, how to audit these parties, reduce trust..
+	\item How to handle all these issues efficiently? We all want a highly responsive Web!
+\end{itemize}
+
+
+\end{document}
