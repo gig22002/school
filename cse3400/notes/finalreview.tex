@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\textbf{Handshake Game}
+
+2PP: Two parties A \& B.\\
+A sends $A,\ N_A$ (nonce of A)\\
+B sends back $N_A,N_B,MAC_k(N_A,N_B,B\rightarrow A, 2)$\\
+A then sends $MAC_k(N_A,N_B,A\rightarrow B, 3)$
+Nonce is randomly generated for each interaction, counter protects against replay\\
+Note: hash functions and their keys are always known, attackers can freely compute\\
+Don't encrypt within a MAC, because the information can be leaked
+
+\textbf{Modular Arithmetic}
+
+$\left(2048-\frac{8}{1436}+\frac{10785}{20*17}\right)\mod 99$\\
+$20*17=340$\\
+$1436^{-1}\mod 99 = 2$\\
+$340^{-1}\mod 99 = 76$\\
+$(2048\mod 99)-(8*1436^{-1}\mod 99)+(10785*340^{-1}\mod 99)$\\
+$(68)-(8*2\mod 99)+(10875*76\mod 99)$\\
+$68-(16\mod 99)+(39\mod 99)=(68-16+39)\mod 99$\\
+$91\mod 99 = 91$
+
+$b=a^{-1}\mod m$, $a*b\mod 1 = 1$
+
+\textbf{Euler totient}
+
+$l>0$\\
+$\Phi(p^l)=p^l-p^{l-1}$ $\leftarrow$ want things in this form\\
+$\Phi(A*B)=\Phi(A)\Phi(B)$
+
+$\Phi(80)=\Phi(2^4*5)$, Prime Factorization\\
+$\Phi(80)+\Phi(2729)=\Phi(2^4*5)+\Phi(2^3*11*31)$\\
+$\Phi(2^4)*\Phi(5)+\Phi(2^3)*\Phi(11)*\Phi(31)$\\
+$(2^4-2^3)*(5^1-5^0)+(2^3-2^2)*(11^1-11^0)*(31^1-31^0)$\\
+$(16-8)(5-1)+(8-4)(11-1)(31-1)=(8*4)+(4*10*30)$
+
+\textbf{Homomorphism (ElGamal)}
+
+The multiplication of two ciphertexts is equal to the encryption of the multiplication of its plaintexts
+
+\end{document}
