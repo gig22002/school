@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{amssymb, amsmath}
+\usepackage[left=1.5cm, right=2cm]{geometry}
+\begin{document}
+
+\textbf{Problem 1}
+\begin{enumerate}
+	\item Yes. Since the encryption encodes direction (Bob replies with $E_k(N_A||N_B)$ and Alice sends back $E_k(N_B||N_A)$), it does not prevent the specific MitM multiple session replay attacks. The goal of the attack is to trick Bob into encrypting his first response in a second session in order to spoof a valid Alice response. Since, in this version, direction is securely encoded, an attacker cannot simply query Bob with his own old nonce since it is $N_B||N_A$, and Bob expects $N_A||N_B$ from Alice.
+	\item Yes. Having separate keys for each direction prevents the MitM attack because the attacker cannot simply send back Bob's response (which encrypts his own old nonce) as Alice's since it would be encrypted with $k_{ba}$ instead of $k_{ab}$. The reasoning is the same as the prior question.
+	\item Eve will not succeed because the MAC includes the flow number. If Eve wished to impersonate Alice, they would have to be able to explicitly forge a tag for $(3||A\rightarrow B||N_B)$ (again, since the flow number as well as direction is encoded). Since Bob will only reply with $MAC_k(2||B\rightarrow A||N_A)$, no matter the $N_A$ that an attacker could send to Bob, they would never get a valid tag over the right flow number.
+	\item Yes. A MitM attacker could open a concurent section with Bob, and pass Bob's response as Alice's request. Since flow direction nor number is encoded in the MAC, replay and redirection attacks are possible (Bob acts somewhat like a free oracle, the issue with the SNA handshake).
+	\item This will allow a MitM attacker to perform a replay attack. Since checking against the last $T_A$ ensures freshness, not doing this check allows an attacker to successfully replay messages that have been sent at an earlier time.
+\end{enumerate}
+
+\textbf{Problem 2}
+\begin{enumerate}
+	\item $97*33^{1900}+761*3010^{36}+69\mod 31$\\
+		$=97*(33\mod 31)^{1900\mod 30}+761*(3010\mod 31)^{36\mod 30}+69\mod 31$ (Fermat's Little Theorem)\\
+		$=97*2^{10}+761*3^{6}+69\mod 31=4*2^{10}+17*3^6+7\mod 31$\\
+		$=2^{12}+17*3^6+7\mod 31=4+17*16+7\mod 31$\\
+		$=4+24+7\mod 31=4$
+	\item $(400\mod 71)((123456\mod 71)^{4200\mod 70}+(1018)*(53341\mod 71)^{7202\mod 70})\mod 71$(Fermat's Little Theorem\\
+		$=45(58^0+24*20^{62})\mod 71=45+45*24*20^{62}\mod 71$\\
+		$=45+15*20^{62}\mod 71=45+15*32\mod 71=45+54\mod 71$ (multiplication property)\\$=99\mod 71=28$
+	\item $(1944*7^{-1})+(984*19^{-1})+10785\mod 93$\\
+		$=84*7^{-1}+54*19^{-1}+90\mod 93$\\
+		Multiplicative Inverse: $7*133\mod 93=1$, $19*49\mod 93=1$\\
+		$=84*133+54*49+90\mod 93=12+42+90\mod 93$\\$=144\mod 93=51$
+	\item $(33\mod 97)^{970\mod 96}+(22*3^{-1})+(1435*15^{-1})\mod 97$ (Fermat's Little Theorem)\\
+		$33^{10}+(22*3^{-1})+(77*15^{-1})\mod 97$\\
+		Multiplicativer Inverse: $3*65\mod 97=1$, $15*110\mod 9=1$\\
+		$22+(22*65)+(77*110)\mod 97=22+72+31\mod 97$\\$=28$
+	\item $\Phi(2*5*3^2)+\Phi(2^3*107)$\\
+		$=\Phi(2)*\Phi(5)*\Phi(3^2)+\Phi(2^3)*\Phi(107)$\\
+		$=(2^1-2^0)(5^1-5^0)(3^2-3^1)+(2^3-2^2)(107^1-107^0)$\\
+		$=1*4*6+4*106=448$
+\end{enumerate}
+
+\textbf{Problem 3}
+\begin{enumerate}
+	\item Alice: $P_A=5^8\mod 47$, Bob: $P_B=5^{13}\mod 47$.\\
+		Alice computes $P_A$ to be 8, and Bob computes $P_B$ to be 43.\\
+		Alice obtains $g^{ab}\mod p$ by raising $P_B$ to the $a^{th}$ power: $43^8\mod 47=(5^{13}\mod 47)^8=5^{13^8}\mod 47=5^{13*8}\mod 47=18$ via the exponent property of modulus.\\
+		Bob obtains the same $g^{ab}\mod p$ by raising $P_A$ to the $b^{th}$ power: $8^{13}\mod 47=(5^8\mod 47)^{13}=5^{13*8}\mod 47=18$.
+	\item \begin{itemize}
+			\item[(a)] Alice will first raise $c_1$ to her secret key, resulting in the shared key $g^{ab}=c_1^a=(g^b\mod p)^a=(g^{a*b}\mod p)$ (modulus exponent property). Then, Alice can compute $F_{c_0}(c_1^a)$, which equals $F_r(e^b\mod p)$: $e^b\mod p = (g^a\mod p)^b = (g^{a*b}\mod p)=c_1^a$; $r=c_0$. Alice can then XOR this computed result with $c_2$, obtaining $m$: $c_2\oplus F_{c_0}(c_1^a)=m\oplus F_r(e^b\mod p)\oplus F_r(e^b\mod p)=m$
+			\item In this scheme, an eavesdropper knows the key to the PRF $F$ ($c_0$, or $r$).
+		\end{itemize}
+\end{enumerate}
+
+\end{document}
