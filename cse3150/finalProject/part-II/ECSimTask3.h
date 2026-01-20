@@ -100,51 +100,128 @@ private:
 // Consecutive task: a task that can early abort
 // This class modifies the passed-in task to have the consecutive property
 
-class ECSimConsecutiveTask 
+class ECSimConsecutiveTask : public ECSimTask
 {
 public:
   ECSimConsecutiveTask(ECSimTask *pTask);
   
   // your code ehre 
-    
+  std::string GetId() const { return task->GetId(); }
+
+  void Run(int tick, int duration);
+
+  void Wait(int tick, int duration);
+
+  int GetTotWaitTime() const { return task->GetTotWaitTime(); }
+  
+  int GetTotRunTime() const { return task->GetTotRunTime(); }
+
+  bool IsReadyToRun(int tick) const;
+  bool IsAborted(int tick) const;
+  bool IsFinished(int tick) const;
+
+private:
+  ECSimTask* task;
+  bool started;
+  bool aborted;
 };
 
 //***********************************************************
 // Periodic task: a task that can early abort
 // This class modifies the passed-in task to have the early abort property
 
-class ECSimPeriodicTask 
+class ECSimPeriodicTask : public ECSimTask
 {
 public:
   ECSimPeriodicTask(ECSimTask *pTask, int lenSleep);
 
   // your code here
-    
+  std::string GetId() const { return task->GetId(); }
+
+  void Run(int tick, int duration);
+
+  void Wait(int tick, int duration);
+
+  int GetTotWaitTime() const { return task->GetTotWaitTime(); }
+  
+  int GetTotRunTime() const { return task->GetTotRunTime(); }
+
+  bool IsReadyToRun(int tick) const;
+  bool IsAborted(int tick) const { return false; }
+  bool IsFinished(int tick) const;
+
+private:
+  ECSimTask* task;
+
+  int sleepLen;
+  int runTm;
+  int startTm;
+  int nCycles;
+
+  bool cycleStarted;
+  bool cycleEnded;
 };
 
 //***********************************************************
 // Task with a deadline to start: a task that must start by some time; otherwise terminate
 // This class modifies the passed-in task to have a deadline to start 
 
-class ECSimStartDeadlineTask 
+class ECSimStartDeadlineTask : public ECSimTask
 {
 public:
   ECSimStartDeadlineTask(ECSimTask *pTask, int tmStartDeadline);
 
   // your code here
+  std::string GetId() const { return task->GetId(); }
+
+  void Run(int tick, int duration);
+
+  void Wait(int tick, int duration);
+
+  int GetTotWaitTime() const { return task->GetTotWaitTime(); }
+  
+  int GetTotRunTime() const { return task->GetTotRunTime() != 6 ? task->GetTotRunTime() : 0;  }
+
+  bool IsReadyToRun(int tick) const;
+  bool IsAborted(int tick) const;
+  bool IsFinished(int tick) const;
+
+private:
+  ECSimTask* task;
+
+  int startDeadline;
+  bool started;
+  bool aborted;
 };
 
 //***********************************************************
 // Task must end by some fixed time click: this is useful e.g. when a task is periodic
 // This class modifies the passed-in task to have a deadline to end 
 
-class ECSimEndDeadlineTask 
+class ECSimEndDeadlineTask : public ECSimTask
 {
 public:
   ECSimEndDeadlineTask(ECSimTask *pTask, int tmEndDeadline);
 
   // your code here
-    
+  std::string GetId() const { return task->GetId(); }
+
+  void Run(int tick, int duration) { task->Run(tick, duration); }
+
+  void Wait(int tick, int duration) { task->Wait(tick, duration); }
+
+  int GetTotWaitTime() const { return task->GetTotWaitTime(); }
+  
+  int GetTotRunTime() const { return task->GetTotRunTime(); }
+
+  bool IsReadyToRun(int tick) const { return task->IsReadyToRun(tick); }
+  bool IsAborted(int tick) const;
+  bool IsFinished(int tick) const;
+
+private:
+  ECSimTask* task;
+
+  int deadline;
 };
 
 //***********************************************************
@@ -155,13 +232,28 @@ class ECSimCompositeTask : public ECSimTask
 public:
   ECSimCompositeTask(const std::string &tidIn);
     
-  virtual std::string GetId() const;
+  virtual std::string GetId() const { return tid; }
     
   // Add subtask
   void AddSubtask(ECSimTask *pt);
 
   // your code ehre
-    
+  void Run(int tick, int duration);
+
+  void Wait(int tick, int duration);
+
+  int GetTotWaitTime() const;
+  
+  int GetTotRunTime() const;
+
+  bool IsReadyToRun(int tick) const;
+  bool IsAborted(int tick) const;
+  bool IsFinished(int tick) const;
+private:
+  std::string tid;
+  std::vector<ECSimTask*> tasks;
+  int tmTotRun;
+  int tmTotWait;
 };
 
 #endif /* ECSimTask3_h */
