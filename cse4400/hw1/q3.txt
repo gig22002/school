@@ -1,0 +1,3 @@
+SHA2-256(data.enc)= afdf4b8f05b443c0d7c310ce237107f38d9f535b28fea76a0dd1151a1fa03a0f
+SHA2-256(data.txt)= ee6862e22bf9952efa589e206adcd237d4ad63a3ec1301e8f4aa8ec7b374daf6
+MD5(data.asc)= 1efb47fa3ed539f48ae885d44abb2533
