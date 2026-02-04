@@ -7,3 +7,5 @@ e) openssl md5 data.asc
 
 f) openssl rsa -in private.pem -pubout -out public.pem
 g) openssl pkeyutl -decrypt -in small.rsa.enc -out small.txt -inkey private.pem
+h) openssl dgst -sign private.pem data.enc > data.enc.sig
+   openssl dgst -verify public.pem -signature data.enc.sig data.enc
