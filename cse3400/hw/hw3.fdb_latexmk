@@ -1,8 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1763938664.57746 "hw3.tex" "hw3.pdf" "hw3" 1763938664.73714 0
+["pdflatex"] 1763939592.87864 "hw3.tex" "hw3.pdf" "hw3" 1763939593.0396 0
   "/etc/texmf/web2c/texmf.cnf" 1761499619.39013 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/gio/.texlive2025/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1761500034.38063 11524 bd7ce70469f3ffe0aca76a76f573d32e ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1246382020 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -39,8 +37,8 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1741904018 41538 c016915c1d51223b6dbbfe27341748a8 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1761499936 125915 807ff72f6023b33a59c427bfd156a3d1 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1761499626 1928198 de402ae3a4a4d919472834c1ae1aefee ""
-  "hw3.aux" 1763938664.70019 32 044b7f8fc9779af7531264e0c5c84b6d "pdflatex"
-  "hw3.tex" 1763938664.44028 4259 7437c928ac6f3b3e269860c97a6f080c ""
+  "hw3.aux" 1763939593.00181 32 044b7f8fc9779af7531264e0c5c84b6d "pdflatex"
+  "hw3.tex" 1763939591.75408 5110 2cf34924326e7570aacb1ef968788dbd ""
   (generated)
   "hw3.aux"
   "hw3.log"

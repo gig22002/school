@@ -44,8 +44,12 @@
 		Bob obtains the same $g^{ab}\mod p$ by raising $P_A$ to the $b^{th}$ power: $8^{13}\mod 47=(5^8\mod 47)^{13}=5^{13*8}\mod 47=18$.
 	\item \begin{itemize}
 			\item[(a)] Alice will first raise $c_1$ to her secret key, resulting in the shared key $g^{ab}=c_1^a=(g^b\mod p)^a=(g^{a*b}\mod p)$ (modulus exponent property). Then, Alice can compute $F_{c_0}(c_1^a)$, which equals $F_r(e^b\mod p)$: $e^b\mod p = (g^a\mod p)^b = (g^{a*b}\mod p)=c_1^a$; $r=c_0$. Alice can then XOR this computed result with $c_2$, obtaining $m$: $c_2\oplus F_{c_0}(c_1^a)=m\oplus F_r(e^b\mod p)\oplus F_r(e^b\mod p)=m$
-			\item In this scheme, an eavesdropper knows the key to the PRF $F$ ($c_0$, or $r$).
+			\item[(b)] In this scheme, an eavesdropper knows the key to the PRF $F$ ($c_0$, or $r$). Since the key is known, the attacker has full access to the PRF to evaluate. Therefore, information about the contents of $F$ might be gained via evaluation since it does not have the same properties as a hash function.
 		\end{itemize}
+	\item \begin{itemize}
+			\item[(a)] Mal can now certify any public key, and can impersonate a legitimate actor by signing a malicious public key as someone else. They can also revoke legitimate certificates, or modify it to "un-revoke" malicious certificates that had been revoked.
+			\item[(b)] Yes. If any certificate is newly revoked before Bob retrieves the CRL and after he has retrieved it previously, Bob will believe it is legitimate when checking the CRL. If the OCSP is late/ambiguous for a certificate that has actually been revoked by the CA, Bob checks the outdated CRL and sees that it is valid.
+	\end{itemize}
 \end{enumerate}
 
 \end{document}
