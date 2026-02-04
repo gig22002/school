@@ -1,0 +1,9 @@
+a) openssl aes-256-cbc -pbkdf2 -pass pass:CSE4400-Spring2026 -in data.enc -out data.txt
+b) openssl aes-128-cbc -K "[key]" -iv "[iv]" -base64 -in data.txt -out data.asc
+
+c) openssl sha256 data.enc
+d) openssl sha256 data.txt
+e) openssl md5 data.asc
+
+f) openssl rsa -in private.pem -pubout -out public.pem
+g) openssl pkeyutl -decrypt -in small.rsa.enc -out small.txt -inkey private.pem
