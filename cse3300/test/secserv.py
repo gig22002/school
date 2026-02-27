@@ -1,13 +1,12 @@
 from socket import *
 from Cryptodome.PublicKey import RSA
+from Cryptodome.Cipher import PKCS1_OAEP
 
 #cryptography
 path = input("Input private key path: ")
-pwd = input("Password: ")
-with open(path, "rb") as f:
-    data = f.read()
-    sk = RSA.import_key(data, pwd.encode())
-print(sk)
+pwd = input("Input password: ")
+sk = RSA.importKey(open('sk.pem').read(), pwd)
+cipher = PKCS1_OAEP.new(sk)
 
 host = "localhost"
 port = 25565
@@ -23,7 +22,8 @@ while 1:
     print('Server connected to', addr)
 
     data = conn.recv(1024)
-    print('Received',data)
+    dec = cipher.decrypt(data)
+    print('Received',dec)
     if not data: 
         break
     msg = 'ACK'
