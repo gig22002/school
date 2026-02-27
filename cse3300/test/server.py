@@ -16,7 +16,7 @@ while 1:
     data = conn.recv(1024)
     print('Received',data)
     if not data: 
-        conn.close()
         break
     msg = 'ACK'
     conn.sendall(msg.encode())
+    conn.close()
