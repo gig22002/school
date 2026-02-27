@@ -5,6 +5,7 @@ from Cryptodome.Cipher import PKCS1_OAEP
 #cryptography
 path = input("Input private key path: ")
 pwd = input("Input password: ")
+debug = input("Debug mode? 0/1: ")
 sk = RSA.importKey(open('sk.pem').read(), pwd)
 cipher = PKCS1_OAEP.new(sk)
 
@@ -22,6 +23,7 @@ while 1:
     print('Server connected to', addr)
 
     data = conn.recv(1024)
+    if(debug): print(data.hex())
     dec = cipher.decrypt(data)
     print('Received',dec)
     if not data: 
