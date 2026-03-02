@@ -29,7 +29,6 @@ def getAcceptedAnswers(stringIn):
     
     accAns = [nym]
     accAns.append(' '.join(ans))
-    accAns.append(stringIn)
     return accAns
 
 if __name__ == "__main__":
@@ -46,14 +45,15 @@ if __name__ == "__main__":
     tryAgain = False
     i = random.randint(0,len(sounds)-1)
     while 1:
-        if(tryAgain): i = random.randint(0,len(sounds)-1)
+        if(tryAgain==False): i = random.randint(0,len(sounds)-1)
         call = playsound(sounds[i], False)
         #Populate answers and format correct answer
         corr = printOptions(sounds[i][:-4], numOptions)
         corrAns = getAcceptedAnswers(sounds[i][:-4].lower())
         ans = input("Input your answer: ")
+        splitAns = re.split(r"[ _+\-]+", ans.lower())
         #Do not select a different birdcall if incorrect
-        if(ans.lower() in corrAns or ans in corr):
+        if(' '.join(splitAns) in corrAns or ans in corr):
             print("Correct!")
             tryAgain = False
         else:
