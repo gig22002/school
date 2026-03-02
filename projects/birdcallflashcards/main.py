@@ -54,10 +54,10 @@ if __name__ == "__main__":
         splitAns = re.split(r"[ _+\-]+", ans.lower())
         #Do not select a different birdcall if incorrect
         if(' '.join(splitAns) in corrAns or ans in corr):
-            print("Correct!")
+            print("<-- Correct! -->")
             tryAgain = False
         else:
-            print("Try again!")
+            print("<-- Try again! -->")
             tryAgain = True
         try: call.stop()
         except: print("No call to stop..")
