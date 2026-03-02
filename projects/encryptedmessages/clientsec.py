@@ -2,8 +2,29 @@ from socket import *
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import PKCS1_OAEP
 
-path = input("Enter public key path: ")
-pk = RSA.import_key(open('pk.pem').read())
+def genkey(passwd='test'):
+    key = RSA.generate(2048)
+    pwd = passwd.encode()
+    with open("sk_client.pem", "wb") as f:
+        data = key.export_key(passphrase=pwd,
+                              pkcs=8,
+                              protection='PBKDF2WithHMAC-SHA512AndAES256-CBC',
+                              prot_params={'iteration_count':131072})
+        f.write(data)
+
+    with open("sk_client.pem", "rb") as f:
+        data = f.read()
+        key = RSA.import_key(data, pwd)
+
+    with open("pk_client.pem", "wb") as f:
+        data = key.public_key().export_key()
+        f.write(data)
+
+try:
+    pk = RSA.import_key(open('pk_client.pem').read())
+except:
+    genkey()
+    pk = RSA.import_key(open('pk_client.pem').read())
 cipher = PKCS1_OAEP.new(pk)
 
 host = 'localhost'
