@@ -47,18 +47,20 @@ if __name__ == "__main__":
     while 1:
         if(tryAgain==False): i = random.randint(0,len(sounds)-1)
         call = playsound(sounds[i], False)
+        
         #Populate answers and format correct answer
         corr = printOptions(sounds[i][:-4], numOptions)
         corrAns = getAcceptedAnswers(sounds[i][:-4].lower())
         ans = input("Input your answer: ")
         splitAns = re.split(r"[ _+\-]+", ans.lower())
+        
         #Do not select a different birdcall if incorrect
+        try: call.stop()
+        except: print("No call to stop..")
         if(' '.join(splitAns) in corrAns or ans in corr):
             print("<-- Correct! -->")
             tryAgain = False
         else:
             print("<-- Try again! -->")
             tryAgain = True
-        try: call.stop()
-        except: print("No call to stop..")
         print('')
