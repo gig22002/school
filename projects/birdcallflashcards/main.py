@@ -14,11 +14,11 @@ def printOptions(rightAns):
     for i in range(0,4):
         x = random.randint(0,len(options)-1)
         print(f"{i+1}: {options[x]}")
-        if(options[x] == rightAns): rightAnsI.append(i+1); print(rightAnsI)
+        if(options[x] == rightAns): rightAnsI.append(i+1)
         options.remove(options[x])
-    return rightAnsI
     
-        
+    return rightAnsI
+
 
 if __name__ == "__main__":
     #get all mp3s in current dir
@@ -31,14 +31,13 @@ if __name__ == "__main__":
     i = random.randint(0,len(sounds)-1)
     while 1:
         if(tryAgain): i = random.randint(0,len(sounds)-1)
-        sound = playsound(sounds[i], False)
+        call = playsound(sounds[i], False)
         corr = printOptions(sounds[i][:-4])
         ans = input("Input your answer: ")
-        print(corr)
-        if(ans.lower() == sounds[i][:-4].lower() or ans in corr):
+        if(ans.lower() == sounds[i][:-4].lower() or int(ans) in corr):
             print("Correct!")
             tryAgain = False
         else:
             print("Try again!")
             tryAgain = True
-        sound.stop()
+        call.stop()
