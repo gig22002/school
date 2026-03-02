@@ -59,4 +59,5 @@ if __name__ == "__main__":
         else:
             print("Try again!")
             tryAgain = True
-        call.stop()
+        try: call.stop()
+        except: print("No call to stop..")
