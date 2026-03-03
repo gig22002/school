@@ -50,7 +50,9 @@ if __name__ == "__main__":
         
         #Populate answers and format correct answer
         if(numOptions != 0): corr = printOptions(sounds[i][:-4], numOptions)
+        else: corr = []
         corrAns = getAcceptedAnswers(sounds[i][:-4].lower())
+        print(corrAns)
         ans = input("Input your answer: ")
         if(ans.lower() == 'exit'): break
         splitAns = re.split(r"[ _+\-]+", ans.lower())
