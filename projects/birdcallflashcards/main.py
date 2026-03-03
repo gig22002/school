@@ -34,6 +34,9 @@ def getAcceptedAnswers(stringIn):
     
     accAns.append(nym)
     accAns.append(' '.join(ans))
+    if(ans[-1] == 'call' or ans[-1] == 'song'):
+        ans.pop()
+        accAns.append(' '.join(ans))
     return accAns
 
 if __name__ == "__main__":
