@@ -1,7 +1,5 @@
 from playsound3 import playsound
-import os
-import random
-import re
+import os, random, re
 
 sounds = []
 
