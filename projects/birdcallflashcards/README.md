@@ -2,7 +2,7 @@
 
 ## Setup
 Put .mp3 files into same directory of appplication.  
-Make sure playsound3 is installed.
+Make sure playsound3 is installed: pip install playsound3 or pip install requirements.txt
 
 ## Usage
 Enter the number of options you want to select from. Choosing '0' will make it open ended, with no listed options.
