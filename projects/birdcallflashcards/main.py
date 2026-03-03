@@ -22,6 +22,8 @@ def printOptions(rightAns, numOptions=4):
 
 def getAcceptedAnswers(stringIn):
     '''Split string in order to output array of accepted parameters: an acronym, split by spaces, and the original file name'''
+    stringIn = stringIn.strip(" 0123456789_+-")
+    print(stringIn)
     ans = re.split(r"[ _+\-]+", stringIn)
     nym = ''
     for x in ans:
