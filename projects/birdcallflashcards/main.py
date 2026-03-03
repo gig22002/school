@@ -6,7 +6,7 @@ import re
 sounds = []
 
 def printOptions(rightAns, numOptions=4):
-    '''Populate 4 random-ordered options with (at least) one correct answer.'''
+    '''Populate n random-ordered options with (at least) one correct answer.'''
     options = [rightAns]
     rightAnsI = []
     for i in range(0,numOptions-1):
@@ -49,9 +49,10 @@ if __name__ == "__main__":
         call = playsound(sounds[i], False)
         
         #Populate answers and format correct answer
-        corr = printOptions(sounds[i][:-4], numOptions)
+        if(numOptions != 0): corr = printOptions(sounds[i][:-4], numOptions)
         corrAns = getAcceptedAnswers(sounds[i][:-4].lower())
         ans = input("Input your answer: ")
+        if(ans.lower() == 'exit'): break
         splitAns = re.split(r"[ _+\-]+", ans.lower())
         
         #Do not select a different birdcall if incorrect
