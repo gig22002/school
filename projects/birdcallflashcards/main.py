@@ -7,12 +7,12 @@ sounds = []
 
 def printOptions(rightAns, numOptions=4):
     '''Populate n random-ordered options with (at least) one correct answer.'''
-    options = [rightAns.strip(" 0123456789_+-")]
+    options = [rightAns.strip(" 0123456789_+-")] #strip leading and trailing special chars
     rightAnsI = []
-    for i in range(0,numOptions-1):
+    for i in range(0,numOptions-1): #generate options array
         options.append(sounds[random.randint(0,len(sounds)-1)][:-4].strip(" 0123456789_+-"))
 
-    for i in range(0,numOptions):
+    for i in range(0,numOptions): #display options and collect correct answer numbers
         x = random.randint(0,len(options)-1)
         print(f"{i+1}: {options[x]}")
         if(options[x] == rightAns): rightAnsI.append(f"{i+1}")
@@ -23,15 +23,16 @@ def printOptions(rightAns, numOptions=4):
 def getAcceptedAnswers(stringIn):
     '''Split string in order to output array of accepted parameters: an acronym, split by spaces, and the original file name'''
     stringIn = stringIn.strip(" 0123456789_+-")
-    ans = re.split(r"[ _+\-]+", stringIn)
+    ans = re.split(r"[ _+\-]+", stringIn) #split answer via regex
     accAns = []
 
     nym = ''
-    for x in ans:
+    for x in ans: #collect the acronym, including and excluding 'call' or 'song'
         if(x=='call' or x=='song'):
             accAns.append(nym)
         nym += x[0]
     
+    #collect accepted answer formats
     accAns.append(nym)
     accAns.append(' '.join(ans))
     accAns.append(''.join(ans))
@@ -55,7 +56,7 @@ if __name__ == "__main__":
     tryAgain = False
     i = random.randint(0,len(sounds)-1)
     while 1:
-        if(tryAgain==False): i = random.randint(0,len(sounds)-1)
+        if(tryAgain==False): i = random.randint(0,len(sounds)-1) #get a new random birdcall
         call = playsound(sounds[i], False)
         
         #Populate answers and format correct answer
