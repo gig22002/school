@@ -24,11 +24,15 @@ def getAcceptedAnswers(stringIn):
     '''Split string in order to output array of accepted parameters: an acronym, split by spaces, and the original file name'''
     stringIn = stringIn.strip(" 0123456789_+-")
     ans = re.split(r"[ _+\-]+", stringIn)
+    accAns = []
+
     nym = ''
     for x in ans:
+        if(x=='call' or x=='song'):
+            accAns.append(nym)
         nym += x[0]
     
-    accAns = [nym]
+    accAns.append(nym)
     accAns.append(' '.join(ans))
     return accAns
 
@@ -62,6 +66,9 @@ if __name__ == "__main__":
         except: print("No call to stop..")
         if(' '.join(splitAns) in corrAns or ans in corr):
             print("<-- Correct! -->")
+            tryAgain = False
+        elif (ans == 'skip'):
+            print("<-- Skipped... -->")
             tryAgain = False
         else:
             print("<-- Try again! -->")
