@@ -7,10 +7,10 @@ sounds = []
 
 def printOptions(rightAns, numOptions=4):
     '''Populate n random-ordered options with (at least) one correct answer.'''
-    options = [rightAns]
+    options = [rightAns.strip(" 0123456789_+-")]
     rightAnsI = []
     for i in range(0,numOptions-1):
-        options.append(sounds[random.randint(0,len(sounds)-1)][:-4])
+        options.append(sounds[random.randint(0,len(sounds)-1)][:-4].strip(" 0123456789_+-"))
 
     for i in range(0,numOptions):
         x = random.randint(0,len(options)-1)
@@ -23,7 +23,6 @@ def printOptions(rightAns, numOptions=4):
 def getAcceptedAnswers(stringIn):
     '''Split string in order to output array of accepted parameters: an acronym, split by spaces, and the original file name'''
     stringIn = stringIn.strip(" 0123456789_+-")
-    print(stringIn)
     ans = re.split(r"[ _+\-]+", stringIn)
     nym = ''
     for x in ans:
@@ -54,7 +53,6 @@ if __name__ == "__main__":
         if(numOptions != 0): corr = printOptions(sounds[i][:-4], numOptions)
         else: corr = []
         corrAns = getAcceptedAnswers(sounds[i][:-4].lower())
-        print(corrAns)
         ans = input("Input your answer: ")
         if(ans.lower() == 'exit'): break
         splitAns = re.split(r"[ _+\-]+", ans.lower())
