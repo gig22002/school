@@ -67,7 +67,7 @@ if __name__ == "__main__":
         if(' '.join(splitAns) in corrAns or ans in corr):
             print("<-- Correct! -->")
             tryAgain = False
-        elif (ans == 'skip'):
+        elif (ans.lower() == 'skip'):
             print("<-- Skipped... -->")
             tryAgain = False
         else:
