@@ -1,0 +1,81 @@
+from socket import *
+import selectors
+import sys, types
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Cipher import PKCS1_OAEP
+
+#cryptography
+path = input("Input private key path: ")
+pwd = input("Input password: ")
+debug = input("Debug mode? 0/1: ")
+try:
+    sk = RSA.importKey(open('sk.pem').read(), pwd)
+    cipher = PKCS1_OAEP.new(sk)
+except: print("Could not establish key")
+
+host = "localhost"
+port = 25565
+
+sel = selectors.DefaultSelector()
+
+s = socket(AF_INET, SOCK_STREAM)
+s.bind((host, port))
+s.listen()
+print(f"Listening on {(host, port)}")
+s.setblocking(False)
+sel.register(s, selectors.EVENT_READ, data=None)
+
+def accept_wrapper(sock):
+    conn, addr = sock.accept()
+    print(f"Accepted connection from {addr}")
+    conn.setblocking(False)
+    data = types.SimpleNamespace(addr=addr, inb=b'', outb=b'')
+    events = selectors.EVENT_READ | selectors.EVENT_WRITE
+    sel.register(conn, events, data=data)
+
+def service_connection(key, mask):
+    sock = key.fileobj
+    data = key.data
+    if mask & selectors.EVENT_READ:
+        recvData = sock.recv(1024)
+        if recvData:
+            data.outb += recv_data
+        else:
+            print(f"Closing connection to {data.addr}")
+            sel.unregister(sock)
+            sock.close()
+    if mask & selectors.EVENT_WRITE:
+        if data.outb:
+            print(f"Transmitting {data.outb!r} to {data.addr}")
+            sent = sock.send(data.outb)
+            data.outb = data.outb[sent:]
+
+try:
+    while 1:
+        events = sel.select(timeout=None)
+        for key, mask in events:
+            if not key.data:
+                accept_wrapper(key.fileobj)
+            else:
+                service_connection(key, mask)
+except:
+    print("Exiting...")
+finally:
+    sel.close()
+
+'''
+while 1:
+    conn, addr = s.accept()
+    
+    print('Server connected to', addr)
+
+    data = conn.recv(1024)
+    if(debug): print(data.hex())
+    dec = cipher.decrypt(data)
+    print('Received',dec)
+    if not data: 
+        break
+    msg = 'ACK'
+    conn.sendall(msg.encode())
+    conn.close()
+'''
