@@ -31,12 +31,13 @@ contract Raffle {
 	function register() public payable {
 		require(msg.value>=regFee, "Insufficient value");
 		require(msg.sender!=owner, "Owner cannot register");
-		require(curPlayers<minPlayers, "Reached max participants");
+		require(curPlayers<minPlayers+1, "Reached max participants");
 		require(registered[msg.sender]==0, "Participant already registered");
 
 		//Initialize registree
 		registered[msg.sender] = 1;
 		curPlayers++;
+		potAmt+=regFee;
 
 		if (msg.value>regFee) {
 			payable(msg.sender).transfer(msg.value-regFee);
@@ -53,6 +54,7 @@ contract Raffle {
 		registered[msg.sender] = 0;
 		curPlayers--;
 		payable(msg.sender).transfer(regFee);
+		potAmt-=regFee;
 		emit deregistered(msg.sender);
 	}
 
@@ -101,6 +103,6 @@ contract Raffle {
 		
 		payable(tickets[picked]).transfer(potAmt);
 		emit winner(tickets[picked], potAmt);
-
+		potAmt=0;
 	}
 }
