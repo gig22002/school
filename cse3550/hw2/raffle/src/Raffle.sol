@@ -5,6 +5,7 @@ contract Raffle {
 	address payable owner;
 	address[] tickets;
 	mapping(address => uint8) registered;
+	event _registered(address addr, uint256 refunded);
 	event deregistered(address addr);
 	uint256 potAmt;
 	uint256 regFee = type(uint256).max;
@@ -40,6 +41,7 @@ contract Raffle {
 		if (msg.value>regFee) {
 			payable(msg.sender).transfer(msg.value-regFee);
 		}
+		emit _registered(msg.sender, msg.value-regFee);
 
 	}
 
