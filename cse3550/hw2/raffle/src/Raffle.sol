@@ -12,6 +12,7 @@ contract Raffle {
 	event boughtTicket(address addr, uint8 n);
 	uint32 curPlayers = 0;
 	uint32 minPlayers;
+	event winner(address addr, uint256 _amt);
 
 	constructor() public {
 		owner = payable(msg.sender);
@@ -56,7 +57,8 @@ contract Raffle {
 	function purchaseTicket(uint8 _amt) public payable {
 		require(registered[msg.sender]!=0, "Participant not registered");
 		require(curPlayers<minPlayers, "Reached max participants");
-		require(msg.value >= _amt*ticketPrice, "Insufficient value");
+		require(msg.value>=_amt*ticketPrice, "Insufficient value");
+		require(countTickets(msg.sender)<20, "Cannot exceed 20 tickets");
 
 		potAmt += _amt*ticketPrice;
 		for (uint8 i=0; i<_amt; i++)
@@ -76,7 +78,25 @@ contract Raffle {
 		return false;
 	}
 	
+	function countTickets(address addr) public view returns (uint8) {
+		uint8 sum = 0;
+		for (uint256 i=0; i<tickets.length; i++){
+			if(tickets[i]==addr)
+				sum++;
+		}
+		return sum;
+	}
+	
 	function pickWinner() public {
-		uint256 picked = uint256(sha256(abi.encodePacked(block.timestamp, blockhash(block.number-1)))) % tickets.length-1;
+		uint256 picked = uint256(sha256(abi.encodePacked(block.timestamp, blockhash(block.number-1)))) % (tickets.length+1);
+		if(picked == 0) {
+			owner.transfer(potAmt);
+			emit winner(owner, potAmt);
+			return;
+		}
+		
+		payable(tickets[picked]).transfer(potAmt);
+		emit winner(tickets[picked], potAmt);
+
 	}
 }
