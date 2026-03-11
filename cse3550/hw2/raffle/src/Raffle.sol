@@ -88,6 +88,8 @@ contract Raffle {
 	}
 	
 	function pickWinner() public {
+		require(msg.sender==owner, "Must be owner to pick");
+		require(curPlayers>=minPlayers, "Minimum players not reached");
 		uint256 picked = uint256(sha256(abi.encodePacked(block.timestamp, blockhash(block.number-1)))) % (tickets.length+1);
 		if(picked == 0) {
 			owner.transfer(potAmt);
