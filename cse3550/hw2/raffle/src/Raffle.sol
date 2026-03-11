@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13
+pragma solidity ^0.8.13;
 
 contract Raffle {
 	address payable owner;
@@ -16,8 +16,8 @@ contract Raffle {
 
 	function register(address registree, uint256 amt) public {
 		if (amt<regFee) {
-			emit failedReg(registree)
-			return 0;
+			emit failedReg(registree);
+			return;
 		}
 	}
 	
