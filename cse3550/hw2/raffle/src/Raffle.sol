@@ -3,9 +3,8 @@ pragma solidity ^0.8.13;
 
 contract Raffle {
 	address payable owner;
-	event failedInit(address addr);
+	address[] tickets;
 	mapping(address => uint8) registered;
-	event failedReg(address addr);
 	event deregistered(address addr);
 	uint256 potAmt;
 	uint256 regFee = type(uint256).max;
@@ -18,11 +17,8 @@ contract Raffle {
 		owner = payable(msg.sender);
 	}
 	
-	function setUpRaffle(uint256 _regFee, uint256 _price, uint256 _min) public payable {
-		if(msg.sender != owner) {
-			emit failedInit(msg.sender);
-			return;
-		}
+	function setUpRaffle(uint256 _regFee, uint256 _price, uint32 _min) public payable {
+		require(msg.sender==owner, "Must be owner to set up");
 
 		potAmt = msg.value;
 		regFee = _regFee;
@@ -31,12 +27,14 @@ contract Raffle {
 	}
 
 	function register() public payable {
-		if (msg.value<regFee || msg.sender == owner || registered[msg.sender] == 0 ) {
-			emit failedReg(msg.sender);
-			return;
-		}
+		require(msg.value>=regFee, "Insufficient value");
+		require(msg.sender!=owner, "Owner cannot register");
+		require(curPlayers<minPlayers, "Reached max participants");
+		require(registered[msg.sender]==0, "Participant already registered");
+
 		//Initialize registree
 		registered[msg.sender] = 1;
+		curPlayers++;
 
 		if (msg.value>regFee) {
 			payable(msg.sender).transfer(msg.value-regFee);
@@ -45,23 +43,40 @@ contract Raffle {
 	}
 
 	function deregister() public {
-		if (registered[msg.sender] == 0 || registered[msg.sender] > 1)
-			return;
+		require(registered[msg.sender]==1, "Participant not registered");
+		require(!checkTicketed(msg.sender), "Particpant already bought ticket");
+		require(curPlayers<minPlayers, "Reached max participants");
+
 		registered[msg.sender] = 0;
+		curPlayers--;
 		payable(msg.sender).transfer(regFee);
 		emit deregistered(msg.sender);
 	}
 
 	function purchaseTicket(uint8 _amt) public payable {
-		if (registered[msg.sender] == 0 || registered[msg.sender]+_amt > 21) 
-			return;
-		if (msg.value < _amt*ticketPrice)
-			return;
+		require(registered[msg.sender]!=0, "Participant not registered");
+		require(curPlayers<minPlayers, "Reached max participants");
+		require(msg.value >= _amt*ticketPrice, "Insufficient value");
+
 		potAmt += _amt*ticketPrice;
+		for (uint8 i=0; i<_amt; i++)
+			tickets.push(msg.sender);
+
 		if (msg.value > _amt*ticketPrice)
 			payable(msg.sender).transfer(msg.value-_amt*ticketPrice);
 		emit boughtTicket(msg.sender, _amt);
 
 	}
+
+	function checkTicketed(address addr) public view returns (bool) {
+		for (uint256 i=0; i<tickets.length; i++){
+			if(tickets[i]==addr)
+				return true;
+		}
+		return false;
+	}
 	
+	function pickWinner() public {
+		uint256 picked = uint256(sha256(abi.encodePacked(block.timestamp, blockhash(block.number-1)))) % tickets.length-1;
+	}
 }
