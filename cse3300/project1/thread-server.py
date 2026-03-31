@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Server side: open a socket on a port, listen for a message from a client,
 and send an echo reply; echoes lines until eof when client closes socket;
@@ -8,6 +9,36 @@ work on standard Windows systems, but process forks do not;
 
 import time, _thread as thread           # or use threading.Thread().start()
 from socket import *                     # get socket constructor and constants
+from collections import defaultdict
+
+#same file reading and dict creating as server.py
+with open("wordlist.txt","r") as f:
+    wordarr = f.read().splitlines() #create array of all the words
+    words = defaultdict(list)
+    for x in wordarr:
+        words[x[0]].append(x) #arrange the words in a dict by letter as key
+
+def searchWords(word):
+    out = []
+    #initialize array to iterate
+    if(word[0]!='?'):
+        arr = words[word[0]] #speed up query via dicts
+    else: arr=wordarr
+    skip = False
+    for x in arr:
+        for i in range(1,len(word)): #for each letter of each word
+            if(len(x)<=i): #prevent errors
+                skip = True
+                break
+            if(x[i]!=word[i] and word[i]!='?'): #check letter
+                skip = True
+                break
+            skip = False
+        if skip: continue
+        if len(x)==len(word): out.append(x) #append IFF bounded
+
+    return out
+
 myHost = ''                              # server machine, '' means local host
 myPort = 50007                           # listen on a non-reserved port number
 
