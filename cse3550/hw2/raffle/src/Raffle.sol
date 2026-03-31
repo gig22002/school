@@ -17,6 +17,7 @@ contract Raffle {
 
 	constructor() public {
 		owner = payable(msg.sender);
+		//move setup to constructor
 	}
 	
 	function setUpRaffle(uint256 _regFee, uint256 _price, uint32 _min) public payable {
@@ -62,7 +63,7 @@ contract Raffle {
 		require(registered[msg.sender]!=0, "Participant not registered");
 		require(curPlayers<minPlayers, "Reached max participants");
 		require(msg.value>=_amt*ticketPrice, "Insufficient value");
-		require(countTickets(msg.sender)<20, "Cannot exceed 20 tickets");
+		require(countTickets(msg.sender)+_amt<20, "Cannot exceed 20 tickets");
 
 		potAmt += _amt*ticketPrice;
 		for (uint8 i=0; i<_amt; i++)
@@ -95,9 +96,11 @@ contract Raffle {
 		require(msg.sender==owner, "Must be owner to pick");
 		require(curPlayers>=minPlayers, "Minimum players not reached");
 		uint256 picked = uint256(sha256(abi.encodePacked(block.timestamp, blockhash(block.number-1)))) % (tickets.length+1);
+		//use built in block random
 		if(picked == 0) {
 			owner.transfer(potAmt);
 			emit winner(owner, potAmt);
+			potAmt=0;
 			return;
 		}
 		
