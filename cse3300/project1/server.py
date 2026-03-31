@@ -44,12 +44,12 @@ while 1:
 
     _in = conn.recv(1024).decode() #receive client input
     try:
-        msg = ','.join(searchWords(_in))
+        msg = ','.join(searchWords(_in)) #separate by commas
         if len(msg)==0: msg = "404: Not Found" #if string is empty
-        else: msg+=',200: OK'
+        else: msg+=',200: OK' #append successful code
     except Exception as e:
         msg = str(e)+",500: Internal Server Error" #if other error
-    print("Found", msg)
+    print("Sending", msg)
     conn.sendall(msg.encode()) #send successful response
     conn.close()
 
