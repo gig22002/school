@@ -29,8 +29,6 @@ def searchWords(word):
 
     return out
 
-#print(searchWords('an?'))
-
 host = "localhost"
 port = 25565 #arbitrary non-privileged port
 sock = socket(AF_INET,SOCK_STREAM)
@@ -38,12 +36,18 @@ sock.bind((host,port))
 
 sock.listen(1) #backlog of 1 unaccepted conn
 
+#print(','.join(searchWords('a??d')))
 while 1:
     conn, addr = sock.accept() #accept a connection
     print("Connected to", addr)
 
     _in = conn.recv(1024) #receive client input
-    print("Received:", _in)
-    conn.sendall("200: OK") #send successful response
+    try:
+        msg = ','.join(searchWords(_in))
+        if len(msg)==0: msg = "404: Not Found"
+    except Exception as e:
+        msg = e+", 500: Internal Server Error"
+    print(msg)
+    conn.sendall(msg.encode()) #send successful response
     conn.close()
 
