@@ -21,7 +21,7 @@ sock.close() #close connection
 
 #handle app layer
 output=recvd.decode().split(',') #split into output + status code
-if ('200' in output[-1]):
+if ('20' in output[-1]):
     print(output[:-1]) #return all but status
 else:
-    print(output[-1])
+    print(output[-1]) #return status if not successful

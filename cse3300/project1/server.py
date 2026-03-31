@@ -3,7 +3,7 @@ from collections import defaultdict
 from socket import *
 
 with open("wordlist.txt","r") as f:
-    wordarr = f.read().splitlines()
+    wordarr = f.read().splitlines() #create array of all the words
     words = defaultdict(list)
     for x in wordarr:
         words[x[0]].append(x) #arrange the words in a dict by letter as key
@@ -12,7 +12,7 @@ def searchWords(word):
     out = []
     #initialize array to iterate
     if(word[0]!='?'):
-        arr = words[word[0]]
+        arr = words[word[0]] #speed up query via dicts
     else: arr=wordarr
     skip = False
     for x in arr:
@@ -24,8 +24,7 @@ def searchWords(word):
                 skip = True
                 break
             skip = False
-        if skip:
-            continue
+        if skip: continue
         if len(x)==len(word): out.append(x) #append IFF bounded
 
     return out
