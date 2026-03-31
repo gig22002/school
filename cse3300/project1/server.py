@@ -14,6 +14,7 @@ def searchWords(word):
     if(word[0]!='?'):
         arr = words[word[0]]
     else: arr=wordarr
+    skip = False
     for x in arr:
         for i in range(1,len(word)): #for each letter of each word
             if(len(x)<=i): #prevent errors
@@ -41,13 +42,13 @@ while 1:
     conn, addr = sock.accept() #accept a connection
     print("Connected to", addr)
 
-    _in = conn.recv(1024) #receive client input
+    _in = conn.recv(1024).decode() #receive client input
     try:
         msg = ','.join(searchWords(_in))
-        if len(msg)==0: msg = "404: Not Found"
+        if len(msg)==0: msg = "404: Not Found" #if string is empty
     except Exception as e:
-        msg = e+", 500: Internal Server Error"
-    print(msg)
+        msg = str(e)+", 500: Internal Server Error" #if other error
+    print("Found", msg)
     conn.sendall(msg.encode()) #send successful response
     conn.close()
 
