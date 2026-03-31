@@ -6,10 +6,18 @@ name = 'localhost'
 port = 25565
 sock = socket(AF_INET,SOCK_STREAM)
 
-sock.connect((name, port)) #connect to socket
-msg = input("Query word (\'?\' as wildcard): ") #get query
-sock.sendall(msg.encode()) #send bytes
+print("Please input a query. \'?\' functions as a wildcard.")
+msg = input("Query: ") #get query
+try:
+    sock.connect((name, port)) #connect to socket
+    sock.sendall(msg.encode()) #send bytes
 
-recvd = sock.recv(1024)
+    recvd = sock.recv(1024)
+except Exception as e:
+    recvd = str(e)+",400: Bad Request"
 print("Obtained", recvd) #print received output
+
+#handle app layer
+output=recvd.decode().split(',')
+print(output)
 sock.close()
