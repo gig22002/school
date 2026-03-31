@@ -12,12 +12,16 @@ try:
     sock.connect((name, port)) #connect to socket
     sock.sendall(msg.encode()) #send bytes
 
-    recvd = sock.recv(1024)
+    recvd = sock.recv(1024) #receive bytes
 except Exception as e:
-    recvd = str(e)+",400: Bad Request"
-print("Obtained", recvd) #print received output
+    recvd = str(e)+",400: Bad Request" #handle client app errors
+
+sock.close() #close connection
+#print("Obtained", recvd) #print received output
 
 #handle app layer
-output=recvd.decode().split(',')
-print(output)
-sock.close()
+output=recvd.decode().split(',') #split into output + status code
+if ('200' in output[-1]):
+    print(output[:-1]) #return all but status
+else:
+    print(output[-1])
