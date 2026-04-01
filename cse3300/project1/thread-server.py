@@ -58,12 +58,12 @@ def handleClient(connection):                    # in spawned thread: reply
             break
         try:
             msg = ','.join(searchWords(data.decode())) #search words
-            if len(msg)==0: msg = "404: Not Found" #if string is empty
-            else: msg+=",200: OK" #append successful code
+            if len(msg)==0: msg = ","+now()+",404: Not Found" #if string is empty
+            else: msg+=","+now()+",200: OK" #append successful code
         except Exception as e:
-            msg = str(e)+",500: Internal Server Error" #if other error
+            msg = str(e)+","+now()+",500: Internal Server Error" #if other error
         print("Sending",msg)
-        connection.send(msg.encode())
+        connection.sendall(msg.encode())
     connection.close()
 
 def dispatcher():                                # listen until process killed
