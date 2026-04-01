@@ -7,7 +7,7 @@ name = 'localhost'
 port = 25565
 
 def conn(_msg):
-    sock = socket(AF_INET,SOCK_STREAM)#initialize socket locally
+    sock = socket(AF_INET,SOCK_STREAM) #initialize socket locally per function call
     try:
         sock.connect((name, port)) #connect to socket
         sock.sendall(_msg.encode()) #send bytes
@@ -19,7 +19,6 @@ def conn(_msg):
     sock.close() #close connection
 
     #handle app layer
-    print(recvd)
     output=recvd.split(',') #split into output + status code
     if ('20' in output[-1]):
         print(output[:-2],"at",output[-2]) #return all but status
@@ -29,7 +28,8 @@ def conn(_msg):
 while 1:
     print("Please input a query. \'?\' functions as a wildcard.")
     msg = input("Query: ") #get query
-    if(msg.lower()=='quit'): 
+    if(msg == ''): continue #skip if no data
+    if(msg.lower()=='quit'): #exit properly
         break
     
-    thread.start_new_thread(conn, (msg, ))
+    thread.start_new_thread(conn, (msg, )) #threaded multi connection

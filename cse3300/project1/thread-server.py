@@ -34,7 +34,7 @@ def searchWords(word):
                 skip = True
                 break
             skip = False
-        if skip: continue
+        if skip: continue #skip word if invalid
         if len(x)==len(word): out.append(x) #append IFF bounded
 
     return out
