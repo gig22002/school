@@ -40,7 +40,7 @@ def searchWords(word):
     return out
 
 myHost = ''                              # server machine, '' means local host
-myPort = 50007                           # listen on a non-reserved port number
+myPort = 25565# listen on a non-reserved port number
 
 sockobj = socket(AF_INET, SOCK_STREAM)           # make a TCP socket object
 sockobj.bind((myHost, myPort))                   # bind it to server port number
@@ -53,9 +53,17 @@ def handleClient(connection):                    # in spawned thread: reply
     time.sleep(5)                                # simulate a blocking activity
     while True:                                  # read, write a client socket
         data = connection.recv(1024)
-        if not data: break
-        reply = 'Echo=>%s at %s' % (data, now())
-        connection.send(reply.encode())
+        if not data:
+            msg = "No data,400: Bad Request"
+            break
+        try:
+            msg = ','.join(searchWords(data.decode())) #search words
+            if len(msg)==0: msg = "404: Not Found" #if string is empty
+            else: msg+=",200: OK" #append successful code
+        except Exception as e:
+            msg = str(e)+",500: Internal Server Error" #if other error
+        print("Sending",msg)
+        connection.send(msg.encode())
     connection.close()
 
 def dispatcher():                                # listen until process killed
