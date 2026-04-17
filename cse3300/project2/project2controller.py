@@ -47,6 +47,25 @@ class Final (object):
     # This binds our PacketIn event listener
     connection.addListeners(self)
 
+  def send_out (self, packet, packet_in, port):
+    msg = of.ofp_flow_mod()
+    msg.match = of.ofp_match.from_packet(packet)
+    msg.idle_timeout = 30
+    msg.hard_timeout = 30
+    msg.actions.append(of.ofp_action_output(port = port))
+    msg.data = packet_in
+    self.connection.send(msg)
+    return
+
+  def send_drop (self, packet, packet_in):
+    msg = of.ofp_flow_mod()
+    msg.match = of.ofp_match.from_packet(packet)
+    msg.idle_timeout = 30
+    msg.hard_timeout = 30
+    msg.data = packet_in
+    self.connection.send(msg)
+    return
+
   def do_final (self, packet, packet_in, port_on_switch, switch_id):
     # This is where you'll put your code. 
     #   - port_on_switch: represents the port that the packet was received on.
@@ -54,7 +73,76 @@ class Final (object):
     #      (for example, s1 would have switch_id == 1, s2 would have switch_id == 2, etc...)
     # You should use these to determine where a packet came from. To figure out where a packet 
     # is going, you can use the IP header information.
-    print("Example code.")
+    ip = packet.find('ipv4')
+    if ip is None:
+      ipv2 = packet.find('ipv6')
+      if ipv2 is None:
+        print("Non IP")
+        self.send_out(packet, packet_in, of.OFPP_FLOOD)
+      return
+    
+    #Floor switches
+    if switch_id == 1:
+      print("From switch 1")
+      if ip.dstip == "10.1.1.10":
+        self.send_out(packet, packet_in, 0)
+        return
+      else:
+        self.send_out(packet, packet_in, 1)
+        return
+    elif switch_id == 2:
+      print("From switch 2")
+      if ip.dstip == "10.2.2.20":
+        self.send_out(packet, packet_in, 0)
+        return
+      else:
+        self.send_out(packet, packet_in, 1)
+        return
+    elif switch_id == 3:
+      print("From switch 3")
+      if ip.dstip == "10.3.3.30":
+        self.send_out(packet, packet_in, 0)
+        return
+      else:
+        self.send_out(packet, packet_in, 1)
+        return
+    #Server switch
+    elif switch_id == 5:
+      print("From switch 5")
+      trusted_hosts = ["10.1.1.10","10.2.2.20","10.3.3.30"]
+      if ip.srcip in trusted_hosts: #if not untrusted, receive
+        if ip.dstip == "10.5.5.50":
+            self.send_out(packet, packet_in, 0)
+            return
+        else:
+            self.send_out(packet, packet_in, 1)
+            return
+      else: #drop if from untrusted
+          self.send_drop(packet, packet_in)
+          return
+    #Core switch
+    elif switch_id == 4:
+      print ("From switch 4")
+      icmp = packet.find('icmp') 
+      if ip.srcip == "123.45.67.89":
+        if icmp is not None: #block ICMP traffic from h5
+          self.send_drop(packet, packet_in)
+          return
+      if ip.dstip == "123.45.67.89":
+        self.send_out(packet, packet_in, 0)
+        return
+      elif ip.dstip == "10.1.1.10":
+        self.send_out(packet, packet_in, 1)
+        return
+      elif ip.dstip == "10.2.2.20":
+        self.send_out(packet, packet_in, 2)
+        return
+      elif ip.dstip == "10.3.3.30":
+        self.send_out(packet, packet_in, 3)
+        return
+      else:
+        self.send_out(packet, packet_in, 5)
+        return
 
   def _handle_PacketIn (self, event):
     """
