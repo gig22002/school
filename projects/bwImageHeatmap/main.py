@@ -3,12 +3,13 @@
 ''' Program to compile black and white images into a heatmap '''
 
 import os
-import imageio as iio
+import imageio.v3 as iio
 import argparse
+import numpy as np
 
 def GetImages(path, filetype):
     '''
-    Helper function to traverse a directory to obtain its images
+    Helper function to traverse a directory to obtain its images and convert to numpy array
 
     parameters:
         - name: path
@@ -21,6 +22,7 @@ def GetImages(path, filetype):
           example: ["png","jpg"]
           description: The file extensions to look for
     '''
+    images = [] #array of images
     #traverse directory
     for f in os.scandir(path):
         if not f.is_file(): continue #skip if not file
@@ -29,8 +31,30 @@ def GetImages(path, filetype):
         fname = os.path.basename(f.name)
         #skip if not desired filetype
         if fname.split(".")[-1] not in filetype: continue
-
         fname = f"{path}/{fname}"
+
+        #convert to 2d array
+        _image = iio.imread(fname)
+        _arr = np.asarray(_image)
+
+        images.append(_arr)
+
+    return images
+
+def CreateHeatmap(images):
+    '''
+    Create a heatmap from a list of images as 2d numpy arrays
+
+    parameters:
+        - name: images
+          type: array of numpy arrays
+          description: The list of images as 2d pixel arrays to create the heatmap from
+    '''
+    #initialize heatmap
+    _s = images[0].shape
+    _shape = (_s[0], _s[1], _s[2])
+    heatmap = np.zeros(_shape, dtype=np.int8)
+
 
 def CreateArgs():
     ''' Helper function to create argparser object '''
@@ -60,4 +84,8 @@ if __name__ == "__main__":
         filetype = ["png","jpg","jpeg"]
     reverse = args.reverse
 
-    GetImages(path, filetype)
+    #get images and convert to np array
+    images = GetImages(path, filetype)
+
+    #construct heatmap
+    CreateHeatmap(images)
