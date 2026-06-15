@@ -18,7 +18,7 @@ This program, by default, iterates over the current working directory. You can s
 Optional Arguments:
 
 `-r`, `--reverse`: Invert the heatmap.  
-`-c VALUE`, `--cmap VALUE`: Specify the Seaborn colormap to use. Default=rocket 
+`-c VALUE`, `--cmap VALUE`: Specify the Seaborn colormap to use. Default=rocket  
 `--type VALUE1 VALUE2 ...`: Specify the filetype(s) to use. Default=[png, jpg, jpeg]
 
 ###### Created by Gio Girasoli 6/15/26
