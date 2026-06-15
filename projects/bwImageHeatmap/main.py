@@ -45,7 +45,7 @@ def GetImages(path, filetype):
 
     return images
 
-def CreateHeatmap(images, reverse=True):
+def CreateHeatmap(images, cmap="rocket", reverse=True):
     '''
     Create a heatmap from a list of images as 2d numpy arrays
 
@@ -84,7 +84,7 @@ def CreateHeatmap(images, reverse=True):
 
     #generate heatmap
     plt.figure(figsize=(6,6), dpi=600)
-    heatmap = sns.heatmap(valuemap, square=True, xticklabels=False, yticklabels=False, cmap="gray")
+    heatmap = sns.heatmap(valuemap, square=True, xticklabels=False, yticklabels=False, cmap=cmap.lower())
     heatmapFig = heatmap.get_figure()
     heatmapFig.savefig("./heatmap.png")
 
@@ -102,6 +102,9 @@ def CreateArgs():
     #reverser flag
     parser.add_argument("-r", "--reverse", action="store_false", help="Reverse black and white for heatmap (default: heatmap is of black pixels).")
 
+    #colormap
+    parser.add_argument("-c", "--cmap", action="store", type=str, default="rocket", help="The seaborn colormap to use in the heatmap")
+
     return parser
 
 if __name__ == "__main__":
@@ -115,9 +118,10 @@ if __name__ == "__main__":
     if filetype is None: #default values
         filetype = ["png","jpg","jpeg"]
     reverse = args.reverse
+    cmap = args.cmap
 
     #get images and convert to np array
     images = GetImages(path, filetype)
 
     #construct heatmap
-    CreateHeatmap(images, reverse)
+    CreateHeatmap(images, cmap, reverse)
