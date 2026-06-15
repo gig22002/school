@@ -6,6 +6,8 @@ import os
 import imageio.v3 as iio
 import argparse
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def GetImages(path, filetype):
     '''
@@ -31,6 +33,8 @@ def GetImages(path, filetype):
         fname = os.path.basename(f.name)
         #skip if not desired filetype
         if fname.split(".")[-1] not in filetype: continue
+        #skip if heatmap
+        if "heatmap" in fname: continue
         fname = f"{path}/{fname}"
 
         #convert to 2d array
@@ -41,7 +45,7 @@ def GetImages(path, filetype):
 
     return images
 
-def CreateHeatmap(images):
+def CreateHeatmap(images, reverse=True):
     '''
     Create a heatmap from a list of images as 2d numpy arrays
 
@@ -49,15 +53,18 @@ def CreateHeatmap(images):
         - name: images
           type: array of numpy arrays
           description: The list of images as 2d pixel arrays to create the heatmap from
+
+        - name: reverse
+          type: bool
+          example: False, True
+          description: Whether or not to reverse the heatmap
     '''
     #initialize heatmap
     _s = images[0].shape
-    _valShape = (_s[0], s[1])
-    _shape = (_s[0], _s[1], _s[2])
+    _valShape = (_s[0], _s[1])
     #valuemap is a float [0,1] to construct heatmap from
     valuemap = np.zeros(_valShape)
-    #heatmap sized to images
-    heatmap = np.zeros(_shape, dtype=np.int8)
+    if reverse: valuemap = np.ones(_valShape)
 
     #create valuemap
     for im in images:
@@ -72,8 +79,14 @@ def CreateHeatmap(images):
             scale = _norm/len(images)
 
             #add to heatmap values
-            valuemap[iy, ix] += scale
-            
+            if reverse: valuemap[iy, ix] -= scale
+            else: valuemap[iy, ix] += scale
+
+    #generate heatmap
+    plt.figure(figsize=(6,6), dpi=600)
+    heatmap = sns.heatmap(valuemap, square=True, xticklabels=False, yticklabels=False, cmap="gray")
+    heatmapFig = heatmap.get_figure()
+    heatmapFig.savefig("./heatmap.png")
 
 def CreateArgs():
     ''' Helper function to create argparser object '''
@@ -87,7 +100,7 @@ def CreateArgs():
     parser.add_argument("--type", nargs="+", action="extend", type=str, default=None, help="The desired image filetype (default: png and jpg).")
 
     #reverser flag
-    parser.add_argument("-r", "--reverse", action="store_true", help="Reverse black and white for heatmap (default: heatmap is of black pixels).")
+    parser.add_argument("-r", "--reverse", action="store_false", help="Reverse black and white for heatmap (default: heatmap is of black pixels).")
 
     return parser
 
@@ -107,4 +120,4 @@ if __name__ == "__main__":
     images = GetImages(path, filetype)
 
     #construct heatmap
-    CreateHeatmap(images)
+    CreateHeatmap(images, reverse)
