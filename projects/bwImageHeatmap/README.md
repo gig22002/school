@@ -13,10 +13,9 @@ Install all required dependencies with `pip install -r requirements.txt`.
 
 Run the program with `python3 main.py`.
 
-This program, by default, iterates over the current working directory. You can specify a specific directory as an argument, however.
+This program, by default, iterates over the current working directory. You can optionally specify a specific directory: `python3 main.py /path/to/images`.
 
-Optional Arguments:
-
+Optional Arguments:  
 `-r`, `--reverse`: Invert the heatmap.  
 `-c VALUE`, `--cmap VALUE`: Specify the Seaborn colormap to use. Default=rocket  
 `--type VALUE1 VALUE2 ...`: Specify the filetype(s) to use. Default=[png, jpg, jpeg]
