@@ -16,6 +16,7 @@ Run the program with `python3 main.py`.
 This program, by default, iterates over the current working directory. You can optionally specify a specific directory: `python3 main.py /path/to/images`.
 
 Optional Arguments:  
+`-o`, `--output`: The filename to export the heatmap to. Default=./heatmap.png  
 `-r`, `--reverse`: Invert the heatmap.  
 `-c VALUE`, `--cmap VALUE`: Specify the Seaborn colormap to use. Default=rocket  
 `--type VALUE1 VALUE2 ...`: Specify the filetype(s) to use. Default=[png, jpg, jpeg]

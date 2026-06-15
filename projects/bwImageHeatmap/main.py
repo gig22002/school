@@ -45,7 +45,7 @@ def GetImages(path, filetype):
 
     return images
 
-def CreateHeatmap(images, cmap="rocket", reverse=True):
+def CreateHeatmap(images, cmap="rocket", reverse=True, output="./heatmap.png"):
     '''
     Create a heatmap from a list of images as 2d numpy arrays
 
@@ -63,6 +63,11 @@ def CreateHeatmap(images, cmap="rocket", reverse=True):
           type: bool
           example: False, True
           description: Whether or not to reverse the heatmap
+
+        - name: output
+          type: string
+          example: "path/to/out-heatmap.png"
+          description: The destination name of the heatmap file
     '''
     #initialize heatmap
     _s = images[0].shape
@@ -91,7 +96,7 @@ def CreateHeatmap(images, cmap="rocket", reverse=True):
     plt.figure(figsize=(6,6), dpi=600)
     heatmap = sns.heatmap(valuemap, square=True, xticklabels=False, yticklabels=False, cmap=cmap.lower())
     heatmapFig = heatmap.get_figure()
-    heatmapFig.savefig("./heatmap.png")
+    heatmapFig.savefig(output)
 
 def CreateArgs():
     ''' Helper function to create argparser object '''
@@ -100,6 +105,9 @@ def CreateArgs():
 
     #input directory
     parser.add_argument("input", nargs="?", default=".", help="Directory to scan images from (default: png and jpg).")
+
+    #output file
+    parser.add_argument("-o", "--output", type=str, default="./heatmap.png", help="The file to output the heatmap to.")
 
     #file type
     parser.add_argument("--type", nargs="+", action="extend", type=str, default=None, help="The desired image filetype (default: png and jpg).")
@@ -119,6 +127,7 @@ if __name__ == "__main__":
     
     #store args
     path = str(args.input)
+    out = args.output
     filetype = args.type
     if filetype is None: #default values
         filetype = ["png","jpg","jpeg"]
@@ -129,4 +138,4 @@ if __name__ == "__main__":
     images = GetImages(path, filetype)
 
     #construct heatmap
-    CreateHeatmap(images, cmap, reverse)
+    CreateHeatmap(images, cmap, reverse, out)
