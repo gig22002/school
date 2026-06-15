@@ -54,6 +54,11 @@ def CreateHeatmap(images, cmap="rocket", reverse=True):
           type: array of numpy arrays
           description: The list of images as 2d pixel arrays to create the heatmap from
 
+        - name: cmap
+          type: string
+          example: "rocket", "gray"
+          description: The seaborn colormap to use for the heatmap
+
         - name: reverse
           type: bool
           example: False, True
