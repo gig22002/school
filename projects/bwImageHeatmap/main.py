@@ -52,9 +52,28 @@ def CreateHeatmap(images):
     '''
     #initialize heatmap
     _s = images[0].shape
+    _valShape = (_s[0], s[1])
     _shape = (_s[0], _s[1], _s[2])
+    #valuemap is a float [0,1] to construct heatmap from
+    valuemap = np.zeros(_valShape)
+    #heatmap sized to images
     heatmap = np.zeros(_shape, dtype=np.int8)
 
+    #create valuemap
+    for im in images:
+        #loop through each pixel
+        for iy, ix, iz in np.ndindex(im.shape):
+            #skip if empty
+            if (im[iy, ix] == 0).all(): continue
+
+            #normalize to one
+            _norm = im[iy, ix, iz]/255
+            #scale to images count
+            scale = _norm/len(images)
+
+            #add to heatmap values
+            valuemap[iy, ix] += scale
+            
 
 def CreateArgs():
     ''' Helper function to create argparser object '''
