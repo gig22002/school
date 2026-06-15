@@ -2,8 +2,35 @@
 
 ''' Program to compile black and white images into a heatmap '''
 
+import os
 import imageio as iio
 import argparse
+
+def GetImages(path, filetype):
+    '''
+    Helper function to traverse a directory to obtain its images
+
+    parameters:
+        - name: path
+          type: string
+          example: /path/to/images
+          description: The directory where the images are stored
+
+        - name: filetype
+          type: array of strings
+          example: ["png","jpg"]
+          description: The file extensions to look for
+    '''
+    #traverse directory
+    for f in os.scandir(path):
+        if not f.is_file(): continue #skip if not file
+        
+        #obtain file name
+        fname = os.path.basename(f.name)
+        #skip if not desired filetype
+        if fname.split(".")[-1] not in filetype: continue
+
+        fname = f"{path}/{fname}"
 
 def CreateArgs():
     ''' Helper function to create argparser object '''
@@ -33,3 +60,4 @@ if __name__ == "__main__":
         filetype = ["png","jpg","jpeg"]
     reverse = args.reverse
 
+    GetImages(path, filetype)
